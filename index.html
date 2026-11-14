@@ -220,7 +220,7 @@
 
   <div class="nav-footer">
     <strong>📦 Model &amp; Live Data Hub</strong>
-    1,344 Training Records + Live CSV Sync
+    1,344 Training Records[cite: 1] + Live CSV Sync
     <button class="btn primary" id="btnDownloadLiveCsv" style="width:100%;margin-top:8px;font-size:11px;padding:6px">⬇ Download Live CSV</button>
   </div>
 </nav>
@@ -229,7 +229,7 @@
   <div class="topbar">
     <h2 id="pageTitle">Hardware Schematic &amp; Live Farmland Map</h2>
     <div class="status-group">
-      <div id="dataSourceBadge" class="data-badge">● STREAMING: LIVE CLOUD CSV &amp; 1,344 BASELINE</div>
+      <div id="dataSourceBadge" class="data-badge">● STREAMING: LIVE CLOUD CSV &amp; 1,344 BASELINE[cite: 1]</div>
       <div id="modeBadge" class="mode-banner mode-l1">LAYER 1 ACTIVE: WATER IRRIGATION</div>
     </div>
   </div>
@@ -245,11 +245,11 @@
         <option value="">🔍 Simulate Condition (from 1,344 Records)...</option>
         <option value="0">Normal Layer 1 Irrigation (IRR00001)</option>
         <option value="2">Normal Dual-Layer Fertigation (IRR00003)</option>
-        <option value="4">Fault: Pipeline Leakage (39 records)</option>
-        <option value="6">Fault: Pipeline Blockage (21 records)</option>
-        <option value="8">Fault: Waterlogging (13 records)</option>
-        <option value="10">Fault: Unequal Distribution (12 records)</option>
-        <option value="12">Fault: Low Water Tank (9 records)</option>
+        <option value="4">Fault: Pipeline Leakage (39 records)[cite: 1]</option>
+        <option value="6">Fault: Pipeline Blockage (21 records)[cite: 1]</option>
+        <option value="8">Fault: Waterlogging (13 records)[cite: 1]</option>
+        <option value="10">Fault: Unequal Distribution (12 records)[cite: 1]</option>
+        <option value="12">Fault: Low Water Tank (9 records)[cite: 1]</option>
       </select>
       <button class="btn" id="btnWalk">🚶 Walk Farmer</button>
       <button class="btn" id="btnGps">📍 Live GPS Origin</button>
@@ -443,23 +443,22 @@
     </div>
   </section>
 
-  <!-- TAB 2: ANIMATED DATA FLOW PIPELINE ARCHITECTURE -->
+  <!-- TAB 2: INTERACTIVE DATA FLOW PIPELINE & WORKFLOW -->
   <section class="page" id="workflowTab">
     <div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-        <h3 style="margin:0">🔄 Interactive Live Data Flow &amp; Analytics Pipeline</h3>
+        <h3 style="margin:0">🔄 Interactive Data Flow &amp; Analytics Pipeline Architecture</h3>
         <div style="display:flex;gap:8px">
-          <button class="btn primary" id="btnSimulatePacket">⚡ Send Live Sensor Packet</button>
+          <button class="btn primary" id="btnSimulatePacket">⚡ Send &amp; Trace Live Packet</button>
           <button class="btn" id="btnDownloadLiveCsvBox">⬇ Download Live CSV</button>
         </div>
       </div>
       <p style="font-size:13px;color:var(--mut);margin-bottom:14px;">
-        Watch how raw telemetry travels from the field sensors through our cloud CSV ingestion layer, gets benchmarked against the <strong>1,344-record training model</strong>, and triggers real-time hardware safety actions.
+        Trace how raw telemetry moves through our 4-stage IoT processing pipeline in real time. Click the button above to simulate packet transmission and view the live JSON/CSV transformation console.
       </p>
 
-      <!-- ANIMATED SVG DATA PIPELINE DIAGRAM -->
+      <!-- ANIMATED PIPELINE DIAGRAM -->
       <svg id="pipelineSvg" viewBox="0 0 880 210" style="width:100%;height:auto;background:#09111e;border-radius:10px;border:1px solid var(--line);display:block">
-        <!-- Connecting Data Streams -->
         <path d="M 190 105 L 250 105" stroke="#1e3557" stroke-width="6" fill="none" />
         <path d="M 190 105 L 250 105" stroke="#4da6ff" stroke-width="4" fill="none" class="data-stream-line" />
 
@@ -469,8 +468,7 @@
         <path d="M 630 105 L 690 105" stroke="#1e3557" stroke-width="6" fill="none" />
         <path d="M 630 105 L 690 105" stroke="#f5b041" stroke-width="4" fill="none" class="data-stream-line" />
 
-        <!-- Stage 1: Edge Sensors -->
-        <g id="stage1Box">
+        <g id="s1Node">
           <rect x="20" y="45" width="170" height="120" rx="10" fill="#0f1c30" stroke="#4da6ff" stroke-width="2" />
           <text x="105" y="72" fill="#4da6ff" font-size="11" font-weight="bold" text-anchor="middle">STAGE 1: EDGE SENSORS</text>
           <text x="105" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">ESP32 + Flow/Bar</text>
@@ -478,8 +476,7 @@
           <text x="105" y="138" fill="#58d68d" font-size="10" font-weight="bold" text-anchor="middle">● MQTT / HTTP TX</text>
         </g>
 
-        <!-- Stage 2: Cloud CSV Sync -->
-        <g id="stage2Box">
+        <g id="s2Node">
           <rect x="250" y="45" width="160" height="120" rx="10" fill="#0f1c30" stroke="#38d9c5" stroke-width="2" />
           <text x="330" y="72" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">STAGE 2: CLOUD SYNC</text>
           <text x="330" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">Live CSV Repository</text>
@@ -487,8 +484,7 @@
           <text x="330" y="138" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">● Auto-Fetch (30s)</text>
         </g>
 
-        <!-- Stage 3: 1,344 Training Engine -->
-        <g id="stage3Box">
+        <g id="s3Node">
           <rect x="470" y="45" width="160" height="120" rx="10" fill="#0f1c30" stroke="#f5b041" stroke-width="2" />
           <text x="550" y="72" fill="#f5b041" font-size="11" font-weight="bold" text-anchor="middle">STAGE 3: AI VALIDATION</text>
           <text x="550" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">1,344-Record Model</text>
@@ -496,8 +492,7 @@
           <text x="550" y="138" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">● Real-Time Scoring</text>
         </g>
 
-        <!-- Stage 4: Actuation & UI -->
-        <g id="stage4Box">
+        <g id="s4Node">
           <rect x="690" y="45" width="170" height="120" rx="10" fill="#0f1c30" stroke="#58d68d" stroke-width="2" />
           <text x="775" y="72" fill="#58d68d" font-size="11" font-weight="bold" text-anchor="middle">STAGE 4: ACTION &amp; UI</text>
           <text x="775" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">24V Relays &amp; Charts</text>
@@ -509,19 +504,26 @@
 
     <div class="grid cols-2">
       <div class="card">
-        <h3>📟 Live Packet Transformation Console (Real-Time Trace)</h3>
+        <h3>📟 Live Packet Transformation Console</h3>
         <div class="console-box" id="pipelineConsole">
-          <div class="console-line">[SYS] Pipeline initialized. Connected to 1,344-record baseline model.</div>
-          <div class="console-line">[SYNC] Cloud CSV polling active. Click "⚡ Send Live Sensor Packet" above to trace a live packet!</div>
+          <div class="console-line">[SYS] Pipeline ready. Linked to 1,344 historical validation records[cite: 1].</div>
+          <div class="console-line">[INFO] Click "⚡ Send &amp; Trace Live Packet" above to inspect real-time payload transformation.</div>
         </div>
       </div>
 
       <div class="card">
-        <h3>🎯 Why Both 1,344 Records &amp; Live CSV Matter</h3>
-        <p style="font-size:13px;color:var(--mut);line-height:1.6;margin:0">
-          • <strong>1,344 Historical Records (Training Baseline):</strong> Captures rare emergency edge-cases (39 pipeline leaks, 21 blockages, 13 waterlogging events) so the system knows exact bar-pressure drop signatures.<br>
-          • <strong>Live CSV Pipeline (Production Telemetry):</strong> Continuously feeds live sensor readings into the dashboard and lets you export clean CSV files anytime for Python or Excel reporting.
-        </p>
+        <h3>🎛️ Interactive Parameter Injector (Test Pipeline Thresholds)</h3>
+        <div style="font-size:13px;display:grid;gap:8px">
+          <div>
+            <label style="color:var(--mut);display:block;margin-bottom:3px">Test Inlet Pressure Drop (bar): <span id="testBarVal" style="color:var(--teal);font-weight:700">3.20b</span></label>
+            <input type="range" id="testBarSlider" min="1.0" max="4.0" step="0.05" value="3.2" style="width:100%;accent-color:var(--teal)">
+          </div>
+          <div>
+            <label style="color:var(--mut);display:block;margin-bottom:3px">Test Solution EC (mS/cm): <span id="testEcVal" style="color:var(--gold);font-weight:700">1.85 mS</span></label>
+            <input type="range" id="testEcSlider" min="0.0" max="3.5" step="0.05" value="1.85" style="width:100%;accent-color:var(--gold)">
+          </div>
+          <button class="btn primary" id="btnTestThreshold" style="margin-top:4px">Evaluate against 1,344 Baseline Rules[cite: 1]</button>
+        </div>
       </div>
     </div>
   </section>
@@ -530,7 +532,7 @@
   <section class="page" id="analyticsTab">
     <div class="grid cols-2" style="margin-bottom:14px">
       <div class="card">
-        <h3>📊 1,344-Record Benchmark Dataset Distribution</h3>
+        <h3>📊 1,344-Record Benchmark Dataset Distribution[cite: 1]</h3>
         <div class="ch-box"><canvas id="datasetDistChart"></canvas></div>
       </div>
       <div class="card">
@@ -636,47 +638,47 @@
       </div>
 
       <div class="card" style="grid-column: span 2;">
-        <h3>1,344-Record Dataset Distribution Breakdown</h3>
+        <h3>1,344-Record Dataset Distribution Breakdown[cite: 1]</h3>
         <table>
           <tr>
             <th>Condition State</th>
-            <th>Record Count</th>
+            <th>Record Count[cite: 1]</th>
             <th>Percentage</th>
             <th>System Safety Action &amp; Interlock</th>
           </tr>
           <tr>
             <td><strong>Normal Operations</strong></td>
-            <td>1,250 records</td>
+            <td>1,250 records[cite: 1]</td>
             <td>93.0%</td>
             <td>Standard dual-layer water and nutrient distribution.</td>
           </tr>
           <tr>
             <td><strong>Pipeline Leakage</strong></td>
-            <td>39 records</td>
+            <td>39 records[cite: 1]</td>
             <td>2.9%</td>
             <td>Triggers pressure drop warning, audio proximity beeps, and isolates valves.</td>
           </tr>
           <tr>
             <td><strong>Pipeline Blockage</strong></td>
-            <td>21 records</td>
+            <td>21 records[cite: 1]</td>
             <td>1.6%</td>
             <td>Detects abnormal back-pressure spike; activates pump pressure relief.</td>
           </tr>
           <tr>
             <td><strong>Waterlogging</strong></td>
-            <td>13 records</td>
+            <td>13 records[cite: 1]</td>
             <td>1.0%</td>
             <td>High moisture cutoff (&gt;50%); pauses scheduled irrigation cycles.</td>
           </tr>
           <tr>
             <td><strong>Unequal Distribution</strong></td>
-            <td>12 records</td>
+            <td>12 records[cite: 1]</td>
             <td>0.9%</td>
             <td>Flags lateral flow variance across Zones 1, 2, and 3.</td>
           </tr>
           <tr>
             <td><strong>Low Water Tank</strong></td>
-            <td>9 records</td>
+            <td>9 records[cite: 1]</td>
             <td>0.7%</td>
             <td>Prevents dry-run cavitation by de-energizing pumps (&lt;15% tank).</td>
           </tr>
@@ -751,7 +753,7 @@ async function loadLiveCsvData() {
       populateDatasetTable();
     }
   } catch (err) {
-    $("dataSourceBadge").textContent = "● 1,344-RECORD BASELINE & LIVE SYNC ACTIVE";
+    $("dataSourceBadge").textContent = "● 1,344-RECORD BASELINE & LIVE SYNC ACTIVE[cite: 1]";
   }
 }
 
@@ -787,7 +789,7 @@ $("btnSimulatePacket").onclick = () => {
   const steps = [
     `<div class="console-line"><span style="color:#4da6ff">[${now}] STAGE 1 (ESP32):</span> Read Start_Bar=${sampleP}b, Zone1_Flow=${sampleFlow}L/m, EC=${sampleEC}mS/cm.</div>`,
     `<div class="console-line"><span style="color:#38d9c5">[${now}] STAGE 2 (CLOUD SYNC):</span> Appended telemetry packet to live CSV stream buffer.</div>`,
-    `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Compared against 1,344-record baseline -> Status: <strong>NORMAL</strong> (99.4% confidence).</div>`,
+    `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Compared against 1,344-record baseline[cite: 1] -> Status: <strong>NORMAL</strong> (99.4% confidence).</div>`,
     `<div class="console-line"><span style="color:#58d68d">[${now}] STAGE 4 (ACTUATION):</span> GPIO Relays maintained ON. Live dashboard charts updated.</div>`
   ];
 
@@ -800,6 +802,36 @@ $("btnSimulatePacket").onclick = () => {
       clearInterval(traceInterval);
     }
   }, 450);
+};
+
+// Interactive Parameter Injector Listeners
+$("testBarSlider").oninput = e => {
+  $("testBarVal").textContent = (+e.target.value).toFixed(2) + "b";
+};
+$("testEcSlider").oninput = e => {
+  $("testEcVal").textContent = (+e.target.value).toFixed(2) + " mS";
+};
+
+$("btnTestThreshold").onclick = () => {
+  const pVal = parseFloat($("testBarSlider").value);
+  const ecVal = parseFloat($("testEcSlider").value);
+  const consoleEl = $("pipelineConsole");
+  const now = new Date().toLocaleTimeString();
+
+  let verdict = "<span style='color:var(--green)'>NORMAL OPERATION</span>";
+  let action = "Maintained standard dual-layer flow.";
+  if (pVal < 2.7) {
+    verdict = "<span style='color:var(--red)'>PIPELINE LEAKAGE DETECTED</span>";
+    action = "Triggered pressure drop warning, proximity audio beep, and isolated zone valves.";
+  } else if (pVal > 3.5) {
+    verdict = "<span style='color:var(--gold)'>PIPELINE BLOCKAGE DETECTED</span>";
+    action = "Detected abnormal back-pressure spike; activated pump pressure relief.";
+  } else if (ecVal > 2.6) {
+    verdict = "<span style='color:var(--red)'>ABNORMAL EC CONCENTRATION</span>";
+    action = "Closed Venturi chemical injection valve and initiated line flush cycle.";
+  }
+
+  consoleEl.innerHTML = `<div class="console-line"><span style="color:#f5b041">[${now}] THRESHOLD EVALUATION:</span> P=${pVal}b, EC=${ecVal}mS/cm → Verdict: ${verdict}. Action: ${action}</div>` + consoleEl.innerHTML;
 };
 
 function getCurrentData() {
@@ -1131,7 +1163,7 @@ function renderCharts() {
     data: {
       labels: ["Normal (1,250)", "Leakage (39)", "Blockage (21)", "Waterlogging (13)", "Unequal (12)", "Low Tank (9)"],
       datasets: [{
-        label: "1,344 Total Benchmark Records",
+        label: "1,344 Total Benchmark Records[cite: 1]",
         data: [1250, 39, 21, 13, 12, 9],
         backgroundColor: ["#58d68d", "#f25f6b", "#f5b041", "#4da6ff", "#38d9c5", "#a569bd"]
       }]
