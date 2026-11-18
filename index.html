@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Smart Farm Two-Layer Intelligence & Hardware Dashboard</title>
+<title>Smart Farm 3D Dual-Layer Intelligence & Hardware Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #070d18;
-    --panel: #0f1c30;
-    --panel-alt: #162642;
-    --line: #223759;
+    --bg: #050b14;
+    --panel: #0d1829;
+    --panel-alt: #132238;
+    --line: #1e3557;
     --text: #eef4fc;
     --mut: #8fa6cb;
     --teal: #38d9c5;
@@ -29,8 +29,8 @@
     min-height: 100vh;
   }
   nav {
-    width: 235px;
-    background: #040810;
+    width: 240px;
+    background: #03070e;
     border-right: 1px solid var(--line);
     padding: 20px 14px;
     flex-shrink: 0;
@@ -38,7 +38,7 @@
     flex-direction: column;
     gap: 6px;
   }
-  nav h1 { font-size: 16px; color: var(--teal); margin: 0; letter-spacing: 0.04em; }
+  nav h1 { font-size: 15px; color: var(--teal); margin: 0; letter-spacing: 0.05em; text-shadow: 0 0 10px rgba(56,217,197,0.4); }
   nav small { color: var(--mut); font-size: 11px; margin-bottom: 12px; display: block; }
   nav button {
     text-align: left;
@@ -47,12 +47,12 @@
     color: var(--mut);
     padding: 11px 12px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
-    transition: 0.15s;
+    transition: 0.2s;
   }
   nav button:hover, nav button.on { background: var(--panel); color: var(--text); }
-  nav button.on { border-left: 3px solid var(--teal); font-weight: 600; }
+  nav button.on { border-left: 3px solid var(--teal); font-weight: 600; box-shadow: inset 4px 0 12px rgba(56,217,197,0.1); }
 
   .nav-footer {
     margin-top: auto;
@@ -65,7 +65,7 @@
   }
   .nav-footer strong { color: var(--teal); display: block; margin-bottom: 4px; font-size: 12px; }
 
-  main { flex: 1; padding: 20px; min-width: 0; }
+  main { flex: 1; padding: 20px; min-width: 0; overflow-y: auto; }
   .topbar {
     display: flex;
     flex-wrap: wrap;
@@ -76,7 +76,7 @@
     padding-bottom: 12px;
     border-bottom: 1px solid var(--line);
   }
-  .topbar h2 { margin: 0; font-size: 20px; }
+  .topbar h2 { margin: 0; font-size: 20px; letter-spacing: 0.03em; }
   .status-group { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .mode-banner {
     padding: 6px 14px;
@@ -105,7 +105,7 @@
   .grid { display: grid; gap: 14px; }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 14px; }
   .cols-2 { grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); }
-  .map-layout { display: grid; gap: 14px; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); }
+  .map-layout { display: grid; gap: 14px; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); }
   @media (max-width: 960px) { .map-layout { grid-template-columns: 1fr; } }
   @media (max-width: 720px) {
     body { flex-direction: column; }
@@ -117,7 +117,8 @@
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: 12px;
-    padding: 15px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
   .card h3 {
     margin: 0 0 10px;
@@ -145,8 +146,9 @@
     font-size: 13px;
     cursor: pointer;
     min-height: 36px;
+    transition: 0.2s;
   }
-  button.btn:hover { border-color: var(--teal); }
+  button.btn:hover { border-color: var(--teal); box-shadow: 0 0 10px rgba(56,217,197,0.2); }
   button.btn.primary { background: var(--teal); color: #05201c; border: 0; font-weight: 700; }
   button.btn.danger { background: rgba(242, 95, 107, 0.2); border-color: var(--red); color: #ff9aa2; }
   button.btn.active-toggle { background: rgba(56, 217, 197, 0.2); border-color: var(--teal); color: var(--teal); font-weight: 600; }
@@ -162,15 +164,30 @@
   .warn { background: rgba(245, 176, 65, 0.2); color: var(--gold); }
   .crit { background: rgba(242, 95, 107, 0.22); color: var(--red); }
 
+  /* 3D Isometric Stage Container */
+  .stage-3d-wrap {
+    perspective: 1200px;
+    width: 100%;
+    background: radial-gradient(circle at center, #0f223d 0%, #070d18 100%);
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 20px;
+    overflow: hidden;
+  }
+  .farm-3d-scene {
+    transform: rotateX(24deg) rotateZ(-12deg);
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    width: 100%;
+    height: 440px;
+    position: relative;
+  }
+
   @keyframes flowDash { to { stroke-dashoffset: -36; } }
   @keyframes electronPulse { to { stroke-dashoffset: -24; } }
-  @keyframes packetStream { to { stroke-dashoffset: -48; } }
-  @keyframes faultPulse { 0% { r: 12; opacity: 0.95; } 100% { r: 34; opacity: 0; } }
   .water-flow { stroke-dasharray: 10 8; animation: flowDash 0.8s linear infinite; }
   .fert-flow { stroke-dasharray: 8 6; animation: flowDash 0.6s linear infinite; }
   .electron-wire { stroke-dasharray: 4 8; animation: electronPulse 0.5s linear infinite; }
-  .data-stream-line { stroke-dasharray: 8 8; animation: packetStream 0.7s linear infinite; }
-  .fault-ring { animation: faultPulse 1.1s ease-out infinite; }
 
   .switch-row {
     display: flex;
@@ -194,7 +211,7 @@
   .ch-box { position: relative; height: 240px; }
 
   .console-box {
-    background: #040810;
+    background: #03070e;
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 12px;
@@ -211,15 +228,15 @@
 <body>
 
 <nav>
-  <h1>SMART FARM AI</h1>
-  <small>1.5-Acre Dual-Layer IoT</small>
-  <button class="on" data-tab="mapTab">🗺️ Hardware Schematic &amp; Map</button>
-  <button data-tab="workflowTab">🔄 Live Data Flow Pipeline</button>
-  <button data-tab="analyticsTab">📊 Live Telemetry &amp; 1,344 Dataset</button>
+  <h1>SMART FARM 3D</h1>
+  <small>Dual-Layer AI &amp; IoT Engine</small>
+  <button class="on" data-tab="mapTab">🌐 3D Hardware &amp; Farmland</button>
+  <button data-tab="workflowTab">🔄 3D Data Flow Pipeline</button>
+  <button data-tab="analyticsTab">📊 Live Charts &amp; 1,344 Dataset</button>
   <button data-tab="layersTab">⚡ Safety Interlocks &amp; Specs</button>
 
   <div class="nav-footer">
-    <strong>📦 Model &amp; Live Data Hub</strong>
+    <strong>📦 Model &amp; Live Data</strong>
     1,344 Training Records[cite: 1] + Live CSV Sync
     <button class="btn primary" id="btnDownloadLiveCsv" style="width:100%;margin-top:8px;font-size:11px;padding:6px">⬇ Download Live CSV</button>
   </div>
@@ -227,14 +244,14 @@
 
 <main>
   <div class="topbar">
-    <h2 id="pageTitle">Hardware Schematic &amp; Live Farmland Map</h2>
+    <h2 id="pageTitle">3D Hardware Schematic &amp; Farmland Digital Twin</h2>
     <div class="status-group">
       <div id="dataSourceBadge" class="data-badge">● STREAMING: LIVE CLOUD CSV &amp; 1,344 BASELINE[cite: 1]</div>
       <div id="modeBadge" class="mode-banner mode-l1">LAYER 1 ACTIVE: WATER IRRIGATION</div>
     </div>
   </div>
 
-  <!-- TAB 1: HARDWARE & FIELD MAP -->
+  <!-- TAB 1: 3D HARDWARE & FIELD MAP -->
   <section class="page on" id="mapTab">
     <div class="toolbar">
       <button class="btn primary" id="btnModeToggle">🎛️ Mode: Dataset Replay</button>
@@ -265,132 +282,93 @@
     <div class="grid kpis" id="kpiStrip"></div>
 
     <div class="map-layout">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-          <h3 style="margin:0">Real Hardware Components &amp; 1.5-Acre Field Layout</h3>
-          <span id="gpsReadout" style="font-size:11px;color:var(--teal)">Pump House Origin (0,0) · 12.2958° N, 76.6394° E</span>
+      <div class="stage-3d-wrap">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <h3 style="margin:0;color:var(--teal)">🌐 3D Isometric Hardware Digital Twin</h3>
+          <span id="gpsReadout" style="font-size:11px;color:var(--mut)">Pump House Origin (0,0) · 12.2958° N, 76.6394° E</span>
         </div>
 
-        <svg id="farmSvg" viewBox="0 0 860 520" style="width:100%;height:auto;border-radius:10px;background:#122416;display:block">
-          <defs>
-            <pattern id="cropRows" width="16" height="16" patternUnits="userSpaceOnUse">
-              <path d="M 0 8 L 16 8" stroke="#1b3420" stroke-width="2" />
-            </pattern>
-          </defs>
+        <div class="farm-3d-scene">
+          <svg id="farmSvg" viewBox="0 0 860 420" style="width:100%;height:100%;display:block">
+            <defs>
+              <pattern id="cropRows" width="16" height="16" patternUnits="userSpaceOnUse">
+                <path d="M 0 8 L 16 8" stroke="#16301d" stroke-width="2" />
+              </pattern>
+            </defs>
 
-          <rect width="860" height="520" fill="#122416" />
-          <rect width="860" height="520" fill="url(#cropRows)" />
-          <rect x="260" y="30" width="575" height="460" rx="14" fill="none" stroke="#2c5c36" stroke-width="2" stroke-dasharray="8 4" />
-          <text x="545" y="52" fill="#71a87d" font-size="12" font-weight="bold" text-anchor="middle">1.5-ACRE AGRICULTURAL PLOT (3 INDEPENDENT SOLENOID ZONES)</text>
+            <rect width="860" height="420" fill="#0c1b11" rx="10" />
+            <rect width="860" height="420" fill="url(#cropRows)" rx="10" />
+            <rect x="260" y="20" width="575" height="380" rx="12" fill="none" stroke="#254d30" stroke-width="2.5" stroke-dasharray="8 4" />
+            <text x="545" y="42" fill="#71a87d" font-size="11" font-weight="bold" text-anchor="middle">1.5-ACRE AGRICULTURAL PLOT (3 3D ISOMETRIC ZONES)</text>
 
-          <!-- Zone 1 -->
-          <g id="zone1Box">
-            <rect id="z1Rect" x="285" y="75" width="165" height="380" rx="10" fill="#1b3621" stroke="#3c6e47" stroke-width="2" />
-            <rect x="352" y="220" width="30" height="18" rx="4" fill="#0b1320" stroke="#38d9c5" stroke-width="1.5" />
-            <path d="M 367 210 L 367 220 M 367 238 L 367 248" stroke="#38d9c5" stroke-width="2" />
-            <text x="367" y="100" fill="#d4f0d9" font-size="14" font-weight="bold" text-anchor="middle">ZONE 1 (0.5 Ac)</text>
-            <text id="z1Sub" x="367" y="118" fill="#98c9a3" font-size="11" text-anchor="middle">Moisture: 38.6%</text>
-            <text x="367" y="233" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">SOLENOID</text>
-          </g>
+            <!-- Zone 1 -->
+            <g id="zone1Box">
+              <rect id="z1Rect" x="285" y="60" width="165" height="315" rx="10" fill="#15301d" stroke="#3c6e47" stroke-width="2" />
+              <rect x="352" y="195" width="30" height="18" rx="4" fill="#0b1320" stroke="#38d9c5" stroke-width="1.5" />
+              <text x="367" y="85" fill="#d4f0d9" font-size="13" font-weight="bold" text-anchor="middle">ZONE 1 (0.5 Ac)</text>
+              <text id="z1Sub" x="367" y="103" fill="#98c9a3" font-size="11" text-anchor="middle">Moisture: 38.6%</text>
+            </g>
 
-          <!-- Zone 2 -->
-          <g id="zone2Box">
-            <rect id="z2Rect" x="470" y="75" width="165" height="380" rx="10" fill="#1b3621" stroke="#3c6e47" stroke-width="2" />
-            <rect x="537" y="220" width="30" height="18" rx="4" fill="#0b1320" stroke="#38d9c5" stroke-width="1.5" />
-            <path d="M 552 210 L 552 220 M 552 238 L 552 248" stroke="#38d9c5" stroke-width="2" />
-            <text x="552" y="100" fill="#d4f0d9" font-size="14" font-weight="bold" text-anchor="middle">ZONE 2 (0.5 Ac)</text>
-            <text id="z2Sub" x="552" y="118" fill="#98c9a3" font-size="11" text-anchor="middle">Moisture: 34.2%</text>
-            <text x="552" y="233" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">SOLENOID</text>
-          </g>
+            <!-- Zone 2 -->
+            <g id="zone2Box">
+              <rect id="z2Rect" x="470" y="60" width="165" height="315" rx="10" fill="#15301d" stroke="#3c6e47" stroke-width="2" />
+              <rect x="537" y="195" width="30" height="18" rx="4" fill="#0b1320" stroke="#38d9c5" stroke-width="1.5" />
+              <text x="552" y="85" fill="#d4f0d9" font-size="13" font-weight="bold" text-anchor="middle">ZONE 2 (0.5 Ac)</text>
+              <text id="z2Sub" x="552" y="103" fill="#98c9a3" font-size="11" text-anchor="middle">Moisture: 34.2%</text>
+            </g>
 
-          <!-- Zone 3 -->
-          <g id="zone3Box">
-            <rect id="z3Rect" x="655" y="75" width="165" height="380" rx="10" fill="#1b3621" stroke="#3c6e47" stroke-width="2" />
-            <rect x="722" y="220" width="30" height="18" rx="4" fill="#0b1320" stroke="#38d9c5" stroke-width="1.5" />
-            <path d="M 737 210 L 737 220 M 737 238 L 737 248" stroke="#38d9c5" stroke-width="2" />
-            <text x="737" y="100" fill="#d4f0d9" font-size="14" font-weight="bold" text-anchor="middle">ZONE 3 (0.5 Ac)</text>
-            <text id="z3Sub" x="737" y="118" fill="#98c9a3" font-size="11" text-anchor="middle">Moisture: 24.9%</text>
-            <text x="737" y="233" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">SOLENOID</text>
-          </g>
+            <!-- Zone 3 -->
+            <g id="zone3Box">
+              <rect id="z3Rect" x="655" y="60" width="165" height="315" rx="10" fill="#15301d" stroke="#3c6e47" stroke-width="2" />
+              <rect x="722" y="195" width="30" height="18" rx="4" fill="#0b1320" stroke="#38d9c5" stroke-width="1.5" />
+              <text x="737" y="85" fill="#d4f0d9" font-size="13" font-weight="bold" text-anchor="middle">ZONE 3 (0.5 Ac)</text>
+              <text id="z3Sub" x="737" y="103" fill="#98c9a3" font-size="11" text-anchor="middle">Moisture: 24.9%</text>
+            </g>
 
-          <!-- HARDWARE CONTROL ROOM -->
-          <rect x="20" y="30" width="220" height="460" rx="12" fill="#0a1322" stroke="#223759" stroke-width="2" />
-          <text x="130" y="52" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">HARDWARE &amp; PLC MODULES</text>
+            <!-- HARDWARE CONTROL ROOM -->
+            <rect x="20" y="20" width="220" height="380" rx="12" fill="#091220" stroke="#223759" stroke-width="2" />
+            <text x="130" y="42" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">ESP32 PLC &amp; PUMP HOUSE</text>
 
-          <rect x="35" y="66" width="190" height="60" rx="6" fill="#101d33" stroke="#38d9c5" stroke-width="2" />
-          <line x1="45" y1="66" x2="45" y2="72" stroke="#f5b041" stroke-width="3" />
-          <line x1="55" y1="66" x2="55" y2="72" stroke="#f5b041" stroke-width="3" />
-          <line x1="65" y1="66" x2="65" y2="72" stroke="#f5b041" stroke-width="3" />
-          <line x1="75" y1="66" x2="75" y2="72" stroke="#f5b041" stroke-width="3" />
-          <line x1="185" y1="66" x2="185" y2="72" stroke="#f5b041" stroke-width="3" />
-          <line x1="195" y1="66" x2="195" y2="72" stroke="#f5b041" stroke-width="3" />
-          <text x="130" y="93" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">ESP32 / PLC CONTROLLER</text>
-          <text id="plcStateText" x="130" y="112" fill="#38d9c5" font-size="10" text-anchor="middle">GPIO Relays Active (24V DC)</text>
+            <rect x="35" y="56" width="190" height="50" rx="6" fill="#0f1c30" stroke="#38d9c5" stroke-width="2" />
+            <text x="130" y="78" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">ESP32 CONTROLLER</text>
+            <text id="plcStateText" x="130" y="94" fill="#38d9c5" font-size="9" text-anchor="middle">GPIO Relays Active (24V DC)</text>
 
-          <path d="M 85 126 L 85 185" stroke="#223759" stroke-width="3" fill="none" />
-          <path id="elecWire1" d="M 85 126 L 85 185" stroke="#38d9c5" stroke-width="3" fill="none" class="electron-wire" />
-          <path d="M 175 126 L 175 340" stroke="#223759" stroke-width="3" fill="none" />
-          <path id="elecWire2" d="M 175 126 L 175 340" stroke="#f5b041" stroke-width="3" fill="none" class="electron-wire" opacity="0.2" />
+            <rect x="35" y="150" width="120" height="85" rx="8" fill="#0e1f38" stroke="#4da6ff" stroke-width="2" />
+            <text x="95" y="172" fill="#4da6ff" font-size="10" font-weight="bold" text-anchor="middle">CENTRIFUGAL PUMP</text>
+            <text id="waterTankText" x="95" y="194" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Tank: 78.7%</text>
+            <text id="pumpPressText" x="95" y="212" fill="#94a8c4" font-size="9" text-anchor="middle">Start: 3.19 bar</text>
 
-          <rect x="35" y="185" width="120" height="95" rx="8" fill="#0f223d" stroke="#4da6ff" stroke-width="2.5" />
-          <circle cx="95" cy="235" r="16" fill="#081424" stroke="#4da6ff" stroke-width="2" />
-          <path d="M 85 235 L 105 235 M 95 225 L 95 245" stroke="#4da6ff" stroke-width="2" />
-          <text x="95" y="205" fill="#4da6ff" font-size="10" font-weight="bold" text-anchor="middle">CENTRIFUGAL PUMP</text>
-          <text id="waterTankText" x="95" y="258" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Tank: 78.7%</text>
-          <text id="pumpPressText" x="95" y="272" fill="#94a8c4" font-size="9" text-anchor="middle">Start: 3.19 bar</text>
+            <rect id="fertBox" x="35" y="280" width="175" height="105" rx="8" fill="#201a13" stroke="#665233" stroke-width="2" />
+            <text x="122" y="302" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">VENTURI INJECTOR</text>
+            <text id="fertTankText" x="122" y="324" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Chem Tank: 84.0%</text>
+            <text id="ecText" x="122" y="342" fill="#94a8c4" font-size="10" text-anchor="middle">EC: 0.00 mS/cm</text>
+            <text id="valveText" x="122" y="360" fill="#94a8c4" font-size="9" text-anchor="middle">Valve: CLOSED</text>
 
-          <rect id="fertBox" x="35" y="340" width="175" height="110" rx="8" fill="#241f17" stroke="#665233" stroke-width="2" />
-          <path d="M 115 365 L 135 365 L 145 375 L 115 375 Z" fill="#f5b041" opacity="0.8" />
-          <text x="122" y="362" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">VENTURI INJECTOR</text>
-          <text id="fertTankText" x="122" y="385" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Chem Tank: 84.0%</text>
-          <text id="injectorText" x="122" y="403" fill="#94a8c4" font-size="10" text-anchor="middle">Injector: INACTIVE</text>
-          <text id="ecText" x="122" y="420" fill="#94a8c4" font-size="10" text-anchor="middle">EC: 0.00 mS/cm</text>
-          <text id="valveText" x="122" y="436" fill="#94a8c4" font-size="9" text-anchor="middle">Backflow Valve: CLOSED</text>
+            <!-- Pipes & Flow Animations -->
+            <path d="M 155 200 L 740 200" stroke="#183052" stroke-width="9" stroke-linecap="round" fill="none" />
+            <path id="mainPipeAnim" d="M 155 200 L 740 200" stroke="#4da6ff" stroke-width="7" stroke-linecap="round" fill="none" class="water-flow" />
 
-          <path d="M 185 340 L 185 245 L 220 245" stroke="#4a3b22" stroke-width="6" fill="none" />
-          <path id="fertPipeAnim" d="M 185 340 L 185 245 L 220 245" stroke="#f5b041" stroke-width="6" fill="none" class="fert-flow" opacity="0" />
+            <path d="M 367 200 L 367 350" stroke="#183052" stroke-width="6" fill="none" />
+            <path id="z1PipeAnim" d="M 367 200 L 367 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-          <path d="M 155 235 L 740 235" stroke="#183052" stroke-width="10" stroke-linecap="round" fill="none" />
-          <path id="mainPipeAnim" d="M 155 235 L 740 235" stroke="#4da6ff" stroke-width="8" stroke-linecap="round" fill="none" class="water-flow" />
+            <path d="M 552 200 L 552 350" stroke="#183052" stroke-width="6" fill="none" />
+            <path id="z2PipeAnim" d="M 552 200 L 552 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-          <path d="M 367 235 L 367 420" stroke="#183052" stroke-width="6" fill="none" />
-          <path id="z1PipeAnim" d="M 367 235 L 367 420" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
-          <text id="z1FlowLabel" x="367" y="440" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">13.6 L/m</text>
+            <path d="M 737 200 L 737 350" stroke="#183052" stroke-width="6" fill="none" />
+            <path id="z3PipeAnim" d="M 737 200 L 737 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-          <path d="M 552 235 L 552 420" stroke="#183052" stroke-width="6" fill="none" />
-          <path id="z2PipeAnim" d="M 552 235 L 552 420" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
-          <text id="z2FlowLabel" x="552" y="440" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">12.7 L/m</text>
+            <g id="faultMarker" transform="translate(460, 200)" style="display:none">
+              <circle cx="0" cy="0" r="14" fill="#f25f6b" />
+              <text x="0" y="4" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">!</text>
+              <text id="faultMarkerLabel" x="0" y="28" fill="#ff9aa2" font-size="11" font-weight="bold" text-anchor="middle">LEAK</text>
+            </g>
 
-          <path d="M 737 235 L 737 420" stroke="#183052" stroke-width="6" fill="none" />
-          <path id="z3PipeAnim" d="M 737 235 L 737 420" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
-          <text id="z3FlowLabel" x="737" y="440" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">13.5 L/m</text>
-
-          <g transform="translate(260, 212)">
-            <rect x="-26" y="-12" width="52" height="20" rx="4" fill="#0a1322" stroke="#38d9c5" />
-            <text id="pStartBadge" x="0" y="2" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">3.19b</text>
-          </g>
-          <g transform="translate(460, 212)">
-            <rect x="-26" y="-12" width="52" height="20" rx="4" fill="#0a1322" stroke="#38d9c5" />
-            <text id="pMidBadge" x="0" y="2" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">2.83b</text>
-          </g>
-          <g transform="translate(645, 212)">
-            <rect x="-26" y="-12" width="52" height="20" rx="4" fill="#0a1322" stroke="#38d9c5" />
-            <text id="pEndBadge" x="0" y="2" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">2.50b</text>
-          </g>
-
-          <g id="faultMarker" transform="translate(460, 235)" style="display:none">
-            <circle cx="0" cy="0" r="14" fill="none" stroke="#f25f6b" stroke-width="3" class="fault-ring" />
-            <circle cx="0" cy="0" r="10" fill="#f25f6b" />
-            <text x="0" y="4" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">!</text>
-            <text id="faultMarkerLabel" x="0" y="28" fill="#ff9aa2" font-size="11" font-weight="bold" text-anchor="middle">LEAKAGE</text>
-          </g>
-
-          <g id="farmerMarker" transform="translate(110, 305)">
-            <circle cx="0" cy="0" r="13" fill="#38d9c5" stroke="#040810" stroke-width="2" />
-            <text x="0" y="4" fill="#040810" font-size="11" font-weight="bold" text-anchor="middle">👨‍🌾</text>
-            <text id="farmerDistLabel" x="0" y="24" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">0m from Pump</text>
-          </g>
-        </svg>
+            <g id="farmerMarker" transform="translate(110, 270)">
+              <circle cx="0" cy="0" r="12" fill="#38d9c5" stroke="#040810" stroke-width="2" />
+              <text x="0" y="4" fill="#040810" font-size="10" font-weight="bold" text-anchor="middle">👨‍🌾</text>
+            </g>
+          </svg>
+        </div>
       </div>
 
       <div class="grid" style="align-content:start">
@@ -437,67 +415,59 @@
 
         <div class="card">
           <h3>🚨 Real-Time Event Log</h3>
-          <div id="eventLog" style="max-height:165px;overflow-y:auto"></div>
+          <div id="eventLog" style="max-height:140px;overflow-y:auto"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TAB 2: INTERACTIVE DATA FLOW PIPELINE & WORKFLOW -->
+  <!-- TAB 2: 3D DATA FLOW PIPELINE -->
   <section class="page" id="workflowTab">
     <div class="card" style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-        <h3 style="margin:0">🔄 Interactive Data Flow &amp; Analytics Pipeline Architecture</h3>
+        <h3 style="margin:0">🔄 Interactive 3D Data Flow &amp; Analytics Pipeline</h3>
         <div style="display:flex;gap:8px">
           <button class="btn primary" id="btnSimulatePacket">⚡ Send &amp; Trace Live Packet</button>
           <button class="btn" id="btnDownloadLiveCsvBox">⬇ Download Live CSV</button>
         </div>
       </div>
       <p style="font-size:13px;color:var(--mut);margin-bottom:14px;">
-        Trace how raw telemetry moves through our 4-stage IoT processing pipeline in real time. Click the button above to simulate packet transmission and view the live JSON/CSV transformation console.
+        Trace how raw telemetry flows from edge sensors into the cloud CSV repository, gets evaluated against the <strong>1,344-record training model</strong>[cite: 1], and trips 24V hardware relays.
       </p>
 
-      <!-- ANIMATED PIPELINE DIAGRAM -->
-      <svg id="pipelineSvg" viewBox="0 0 880 210" style="width:100%;height:auto;background:#09111e;border-radius:10px;border:1px solid var(--line);display:block">
-        <path d="M 190 105 L 250 105" stroke="#1e3557" stroke-width="6" fill="none" />
-        <path d="M 190 105 L 250 105" stroke="#4da6ff" stroke-width="4" fill="none" class="data-stream-line" />
-
-        <path d="M 410 105 L 470 105" stroke="#1e3557" stroke-width="6" fill="none" />
-        <path d="M 410 105 L 470 105" stroke="#38d9c5" stroke-width="4" fill="none" class="data-stream-line" />
-
-        <path d="M 630 105 L 690 105" stroke="#1e3557" stroke-width="6" fill="none" />
-        <path d="M 630 105 L 690 105" stroke="#f5b041" stroke-width="4" fill="none" class="data-stream-line" />
-
-        <g id="s1Node">
-          <rect x="20" y="45" width="170" height="120" rx="10" fill="#0f1c30" stroke="#4da6ff" stroke-width="2" />
-          <text x="105" y="72" fill="#4da6ff" font-size="11" font-weight="bold" text-anchor="middle">STAGE 1: EDGE SENSORS</text>
-          <text x="105" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">ESP32 + Flow/Bar</text>
-          <text x="105" y="116" fill="#8fa6cb" font-size="10" text-anchor="middle">Samples every 1.2s</text>
-          <text x="105" y="138" fill="#58d68d" font-size="10" font-weight="bold" text-anchor="middle">● MQTT / HTTP TX</text>
+      <svg id="pipelineSvg" viewBox="0 0 880 180" style="width:100%;height:auto;background:#050d18;border-radius:10px;border:1px solid var(--line);display:block">
+        <path d="M 190 90 L 250 90 M 410 90 L 470 90 M 630 90 L 690 90" stroke="#1e3557" stroke-width="6" fill="none" />
+        
+        <g>
+          <rect x="20" y="30" width="170" height="120" rx="10" fill="#0f1c30" stroke="#4da6ff" stroke-width="2" />
+          <text x="105" y="58" fill="#4da6ff" font-size="11" font-weight="bold" text-anchor="middle">STAGE 1: EDGE SENSORS</text>
+          <text x="105" y="80" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">ESP32 + Flow/Bar</text>
+          <text x="105" y="102" fill="#8fa6cb" font-size="10" text-anchor="middle">Samples every 1.2s</text>
+          <text x="105" y="125" fill="#58d68d" font-size="10" font-weight="bold" text-anchor="middle">● MQTT / HTTP TX</text>
         </g>
 
-        <g id="s2Node">
-          <rect x="250" y="45" width="160" height="120" rx="10" fill="#0f1c30" stroke="#38d9c5" stroke-width="2" />
-          <text x="330" y="72" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">STAGE 2: CLOUD SYNC</text>
-          <text x="330" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">Live CSV Repository</text>
-          <text x="330" y="116" fill="#8fa6cb" font-size="10" text-anchor="middle">Cleaning &amp; Parsing</text>
-          <text x="330" y="138" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">● Auto-Fetch (30s)</text>
+        <g>
+          <rect x="250" y="30" width="160" height="120" rx="10" fill="#0f1c30" stroke="#38d9c5" stroke-width="2" />
+          <text x="330" y="58" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">STAGE 2: CLOUD SYNC</text>
+          <text x="330" y="80" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">Live CSV Repository</text>
+          <text x="330" y="102" fill="#8fa6cb" font-size="10" text-anchor="middle">Cleaning &amp; Parsing</text>
+          <text x="330" y="125" fill="#38d9c5" font-size="10" font-weight="bold" text-anchor="middle">● Auto-Fetch (30s)</text>
         </g>
 
-        <g id="s3Node">
-          <rect x="470" y="45" width="160" height="120" rx="10" fill="#0f1c30" stroke="#f5b041" stroke-width="2" />
-          <text x="550" y="72" fill="#f5b041" font-size="11" font-weight="bold" text-anchor="middle">STAGE 3: AI VALIDATION</text>
-          <text x="550" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">1,344-Record Model</text>
-          <text x="550" y="116" fill="#8fa6cb" font-size="10" text-anchor="middle">6 Anomaly Thresholds</text>
-          <text x="550" y="138" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">● Real-Time Scoring</text>
+        <g>
+          <rect x="470" y="30" width="160" height="120" rx="10" fill="#0f1c30" stroke="#f5b041" stroke-width="2" />
+          <text x="550" y="58" fill="#f5b041" font-size="11" font-weight="bold" text-anchor="middle">STAGE 3: AI VALIDATION</text>
+          <text x="550" y="80" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">1,344-Record Model[cite: 1]</text>
+          <text x="550" y="102" fill="#8fa6cb" font-size="10" text-anchor="middle">6 Anomaly Thresholds</text>
+          <text x="550" y="125" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">● Real-Time Scoring</text>
         </g>
 
-        <g id="s4Node">
-          <rect x="690" y="45" width="170" height="120" rx="10" fill="#0f1c30" stroke="#58d68d" stroke-width="2" />
-          <text x="775" y="72" fill="#58d68d" font-size="11" font-weight="bold" text-anchor="middle">STAGE 4: ACTION &amp; UI</text>
-          <text x="775" y="95" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">24V Relays &amp; Charts</text>
-          <text x="775" y="116" fill="#8fa6cb" font-size="10" text-anchor="middle">Interlocks &amp; Audio Alert</text>
-          <text x="775" y="138" fill="#58d68d" font-size="10" font-weight="bold" text-anchor="middle">● Dashboard Live</text>
+        <g>
+          <rect x="690" y="30" width="170" height="120" rx="10" fill="#0f1c30" stroke="#58d68d" stroke-width="2" />
+          <text x="775" y="58" fill="#58d68d" font-size="11" font-weight="bold" text-anchor="middle">STAGE 4: ACTION &amp; UI</text>
+          <text x="775" y="80" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">24V Relays &amp; Charts</text>
+          <text x="775" y="102" fill="#8fa6cb" font-size="10" text-anchor="middle">Interlocks &amp; Audio Alert</text>
+          <text x="775" y="125" fill="#58d68d" font-size="10" font-weight="bold" text-anchor="middle">● Dashboard Live</text>
         </g>
       </svg>
     </div>
@@ -506,16 +476,16 @@
       <div class="card">
         <h3>📟 Live Packet Transformation Console</h3>
         <div class="console-box" id="pipelineConsole">
-          <div class="console-line">[SYS] Pipeline ready. Linked to 1,344 historical validation records[cite: 1].</div>
-          <div class="console-line">[INFO] Click "⚡ Send &amp; Trace Live Packet" above to inspect real-time payload transformation.</div>
+          <div class="console-line">[SYS] Pipeline initialized. Linked to 1,344 historical records[cite: 1].</div>
+          <div class="console-line">[INFO] Click "⚡ Send &amp; Trace Live Packet" above to test live payload telemetry.</div>
         </div>
       </div>
 
       <div class="card">
-        <h3>🎛️ Interactive Parameter Injector (Test Pipeline Thresholds)</h3>
+        <h3>🎛️ Interactive Parameter Injector</h3>
         <div style="font-size:13px;display:grid;gap:8px">
           <div>
-            <label style="color:var(--mut);display:block;margin-bottom:3px">Test Inlet Pressure Drop (bar): <span id="testBarVal" style="color:var(--teal);font-weight:700">3.20b</span></label>
+            <label style="color:var(--mut);display:block;margin-bottom:3px">Test Pressure Drop (bar): <span id="testBarVal" style="color:var(--teal);font-weight:700">3.20b</span></label>
             <input type="range" id="testBarSlider" min="1.0" max="4.0" step="0.05" value="3.2" style="width:100%;accent-color:var(--teal)">
           </div>
           <div>
@@ -528,7 +498,7 @@
     </div>
   </section>
 
-  <!-- TAB 3: LIVE TELEMETRY & 1,344 DATASET EXPLORER -->
+  <!-- TAB 3: LIVE TELEMETRY & CHARTS -->
   <section class="page" id="analyticsTab">
     <div class="grid cols-2" style="margin-bottom:14px">
       <div class="card">
@@ -548,7 +518,7 @@
       </div>
 
       <div class="card">
-        <h3>🗄️ Interactive Dataset Inspector (Click any row to load into Schematic)</h3>
+        <h3>🗄️ Interactive Dataset Inspector (Click any row to load into 3D Twin)</h3>
         <div style="max-height:240px;overflow-y:auto">
           <table>
             <thead>
@@ -713,7 +683,7 @@ let state = {
   alarmOn: false,
   audioCtx: null,
   beepTimer: null,
-  farmer: { x: 110, y: 305 },
+  farmer: { x: 110, y: 270 },
   walkStep: 0,
   manual: { pump: true, fert: false, z1: true, z2: true, z3: true, leak: false }
 };
@@ -778,7 +748,6 @@ document.querySelectorAll("nav button[data-tab]").forEach(btn => {
   };
 });
 
-// Interactive Live Packet Trace Simulation
 $("btnSimulatePacket").onclick = () => {
   const consoleEl = $("pipelineConsole");
   const now = new Date().toLocaleTimeString();
@@ -789,8 +758,8 @@ $("btnSimulatePacket").onclick = () => {
   const steps = [
     `<div class="console-line"><span style="color:#4da6ff">[${now}] STAGE 1 (ESP32):</span> Read Start_Bar=${sampleP}b, Zone1_Flow=${sampleFlow}L/m, EC=${sampleEC}mS/cm.</div>`,
     `<div class="console-line"><span style="color:#38d9c5">[${now}] STAGE 2 (CLOUD SYNC):</span> Appended telemetry packet to live CSV stream buffer.</div>`,
-    `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Compared against 1,344-record baseline[cite: 1] -> Status: <strong>NORMAL</strong> (99.4% confidence).</div>`,
-    `<div class="console-line"><span style="color:#58d68d">[${now}] STAGE 4 (ACTUATION):</span> GPIO Relays maintained ON. Live dashboard charts updated.</div>`
+    `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Evaluated against baseline model[cite: 1] -> Status: <strong>NORMAL</strong>.</div>`,
+    `<div class="console-line"><span style="color:#58d68d">[${now}] STAGE 4 (ACTUATION):</span> GPIO Relays maintained ON. 3D digital twin synced.</div>`
   ];
 
   let stepIdx = 0;
@@ -804,13 +773,8 @@ $("btnSimulatePacket").onclick = () => {
   }, 450);
 };
 
-// Interactive Parameter Injector Listeners
-$("testBarSlider").oninput = e => {
-  $("testBarVal").textContent = (+e.target.value).toFixed(2) + "b";
-};
-$("testEcSlider").oninput = e => {
-  $("testEcVal").textContent = (+e.target.value).toFixed(2) + " mS";
-};
+$("testBarSlider").oninput = e => { $("testBarVal").textContent = (+e.target.value).toFixed(2) + "b"; };
+$("testEcSlider").oninput = e => { $("testEcVal").textContent = (+e.target.value).toFixed(2) + " mS"; };
 
 $("btnTestThreshold").onclick = () => {
   const pVal = parseFloat($("testBarSlider").value);
@@ -822,13 +786,13 @@ $("btnTestThreshold").onclick = () => {
   let action = "Maintained standard dual-layer flow.";
   if (pVal < 2.7) {
     verdict = "<span style='color:var(--red)'>PIPELINE LEAKAGE DETECTED</span>";
-    action = "Triggered pressure drop warning, proximity audio beep, and isolated zone valves.";
+    action = "Triggered pressure drop warning and isolated zone valves.";
   } else if (pVal > 3.5) {
     verdict = "<span style='color:var(--gold)'>PIPELINE BLOCKAGE DETECTED</span>";
-    action = "Detected abnormal back-pressure spike; activated pump pressure relief.";
+    action = "Activated pump pressure relief valve.";
   } else if (ecVal > 2.6) {
     verdict = "<span style='color:var(--red)'>ABNORMAL EC CONCENTRATION</span>";
-    action = "Closed Venturi chemical injection valve and initiated line flush cycle.";
+    action = "Closed Venturi chemical injection valve.";
   }
 
   consoleEl.innerHTML = `<div class="console-line"><span style="color:#f5b041">[${now}] THRESHOLD EVALUATION:</span> P=${pVal}b, EC=${ecVal}mS/cm → Verdict: ${verdict}. Action: ${action}</div>` + consoleEl.innerHTML;
@@ -909,48 +873,34 @@ function updateUI() {
   mainAnim.style.opacity = d.irr ? "1" : "0";
   mainAnim.setAttribute("stroke", pipeColor);
 
-  $("fertPipeAnim").style.opacity = d.fert ? "1" : "0";
-  $("elecWire1").style.opacity = d.irr ? "1" : "0.15";
-  $("elecWire2").style.opacity = d.fert ? "1" : "0.15";
-  $("fertBox").setAttribute("stroke", d.fert ? "#f5b041" : "#665233");
-
   [
-    { anim: "z1PipeAnim", flow: d.fZ1, lbl: "z1FlowLabel", sub: "z1Sub", m: d.mZ1, rect: "z1Rect" },
-    { anim: "z2PipeAnim", flow: d.fZ2, lbl: "z2FlowLabel", sub: "z2Sub", m: d.mZ2, rect: "z2Rect" },
-    { anim: "z3PipeAnim", flow: d.fZ3, lbl: "z3FlowLabel", sub: "z3Sub", m: d.mZ3, rect: "z3Rect" }
+    { anim: "z1PipeAnim", flow: d.fZ1, sub: "z1Sub", m: d.mZ1, rect: "z1Rect" },
+    { anim: "z2PipeAnim", flow: d.fZ2, sub: "z2Sub", m: d.mZ2, rect: "z2Rect" },
+    { anim: "z3PipeAnim", flow: d.fZ3, sub: "z3Sub", m: d.mZ3, rect: "z3Rect" }
   ].forEach(z => {
     const el = $(z.anim);
     el.style.opacity = (d.irr && z.flow > 0) ? "1" : "0";
     el.setAttribute("stroke", pipeColor);
-    $(z.lbl).textContent = `${z.flow} L/m`;
     $(z.sub).textContent = `Moisture: ${z.m}%`;
-    $(z.rect).setAttribute("fill", z.m > 50 ? "#1b3f4c" : "#1b3621");
+    $(z.rect).setAttribute("fill", z.m > 50 ? "#1b3f4c" : "#15301d");
   });
 
   $("waterTankText").textContent = `Tank: ${d.wTank}%`;
   $("pumpPressText").textContent = `Start: ${d.pStart} bar`;
   $("fertTankText").textContent = `Chem Tank: ${d.fTank}%`;
-  $("injectorText").textContent = `Injector: ${d.injStat.toUpperCase()}`;
   $("ecText").textContent = `EC: ${d.ec.toFixed(2)} mS/cm`;
-  $("valveText").textContent = `Backflow Valve: ${d.valveStat.toUpperCase()}`;
-
-  $("pStartBadge").textContent = `${d.pStart}b`;
-  $("pMidBadge").textContent = `${d.pMid}b`;
-  $("pEndBadge").textContent = `${d.pEnd}b`;
+  $("valveText").textContent = `Valve: ${d.valveStat.toUpperCase()}`;
 
   const hasIrrFault = d.irrCond !== "Normal";
   const hasFertFault = d.fertCond !== "Not Active" && d.fertCond !== "Normal Injection";
   const activeFault = hasIrrFault ? d.irrCond : (hasFertFault ? d.fertCond : null);
 
   const fm = $("faultMarker");
-  let faultCoords = { x: 460, y: 235 };
+  let faultCoords = { x: 460, y: 200 };
   if (activeFault) {
-    if (d.faultSec.includes("Start")) faultCoords = { x: 310, y: 235 };
-    else if (d.faultSec.includes("End") || d.faultSec.includes("Zone 3")) faultCoords = { x: 690, y: 235 };
-    else if (d.faultSec.includes("Zone 1")) faultCoords = { x: 367, y: 310 };
-    else if (d.faultSec.includes("Pump")) faultCoords = { x: 110, y: 235 };
-    else if (hasFertFault) faultCoords = { x: 185, y: 340 };
-
+    if (d.faultSec.includes("Start")) faultCoords = { x: 310, y: 200 };
+    else if (d.faultSec.includes("End") || d.faultSec.includes("Zone 3")) faultCoords = { x: 690, y: 200 };
+    else if (d.faultSec.includes("Zone 1")) faultCoords = { x: 367, y: 280 };
     fm.setAttribute("transform", `translate(${faultCoords.x}, ${faultCoords.y})`);
     $("faultMarkerLabel").textContent = activeFault.toUpperCase();
     fm.style.display = "block";
@@ -958,9 +908,7 @@ function updateUI() {
     fm.style.display = "none";
   }
 
-  const distFromPump = Math.round(Math.hypot(state.farmer.x - 95, state.farmer.y - 235) * 0.4);
   $("farmerMarker").setAttribute("transform", `translate(${state.farmer.x}, ${state.farmer.y})`);
-  $("farmerDistLabel").textContent = `${distFromPump}m from Pump`;
 
   $("diagBox").innerHTML = `
     <div style="margin-bottom:6px">
@@ -971,8 +919,7 @@ function updateUI() {
       <strong>Layer 2 (Fertigation):</strong> <span class="pill ${hasFertFault ? 'warn' : 'ok'}">${d.fertCond}</span>
     </div>
     <div style="font-size:12px;color:var(--mut)">
-      • <strong>Hardware Interlock:</strong> ${d.fert ? "Venturi active, backflow check-valve OPEN." : (d.irr ? "Centrifugal pump running, chemical solenoid CLOSED." : "All GPIO relays LOW.")}<br>
-      • <strong>Flushing State:</strong> ${d.flushStat}
+      • <strong>Hardware Interlock:</strong> ${d.fert ? "Venturi active, backflow check-valve OPEN." : (d.irr ? "Centrifugal pump running, chemical solenoid CLOSED." : "All GPIO relays LOW.")}
     </div>
   `;
 
@@ -984,8 +931,6 @@ function updateUI() {
       renderLog();
     }
   }
-
-  handleAlarm(activeFault, faultCoords);
 }
 
 function renderLog() {
@@ -1002,27 +947,6 @@ function jumpToRecord(i) {
   $("btnModeToggle").textContent = "🎛️ Mode: Dataset Replay";
   state.idx = Math.min(i, DATASET.length - 1);
   updateUI();
-}
-
-function playBeep(freq) {
-  if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = state.audioCtx.createOscillator();
-  const gain = state.audioCtx.createGain();
-  osc.frequency.value = freq;
-  gain.gain.value = 0.12;
-  osc.connect(gain);
-  gain.connect(state.audioCtx.destination);
-  osc.start();
-  osc.stop(state.audioCtx.currentTime + 0.08);
-}
-
-function handleAlarm(activeFault, faultCoords) {
-  clearTimeout(state.beepTimer);
-  if (!state.alarmOn || !activeFault) return;
-  const distPx = Math.hypot(state.farmer.x - faultCoords.x, state.farmer.y - faultCoords.y);
-  const interval = Math.max(160, Math.min(1400, distPx * 2.5));
-  try { playBeep(distPx < 100 ? 1050 : 780); } catch (e) {}
-  state.beepTimer = setTimeout(() => handleAlarm(activeFault, faultCoords), interval);
 }
 
 $("btnModeToggle").onclick = () => {
@@ -1070,16 +994,7 @@ $("btnPlay").onclick = () => {
   }
 };
 
-$("btnAlarm").onclick = () => {
-  state.alarmOn = !state.alarmOn;
-  $("btnAlarm").textContent = state.alarmOn ? "🔊 Alarm: ON" : "🔊 Alarm: OFF";
-  $("btnAlarm").classList.toggle("danger", state.alarmOn);
-  updateUI();
-};
-
-const walkWaypoints = [
-  { x: 110, y: 305 }, { x: 310, y: 265 }, { x: 460, y: 265 }, { x: 690, y: 265 }, { x: 367, y: 360 }
-];
+const walkWaypoints = [{ x: 110, y: 270 }, { x: 310, y: 220 }, { x: 460, y: 220 }, { x: 690, y: 220 }];
 $("btnWalk").onclick = () => {
   state.walkStep = (state.walkStep + 1) % walkWaypoints.length;
   state.farmer = walkWaypoints[state.walkStep];
@@ -1093,9 +1008,9 @@ $("btnGps").onclick = () => {
     pos => {
       const lat = pos.coords.latitude.toFixed(5);
       const lon = pos.coords.longitude.toFixed(5);
-      $("gpsReadout").textContent = `Pump House Origin (0,0): ${lat}° N, ${lon}° E (±${Math.round(pos.coords.accuracy)}m)`;
+      $("gpsReadout").textContent = `Pump House Origin: ${lat}° N, ${lon}° E`;
     },
-    () => { $("gpsReadout").textContent = "Pump House Origin (0,0) · 12.2958° N, 76.6394° E (Simulated Fix)"; }
+    () => { $("gpsReadout").textContent = "Pump House Origin (0,0) · 12.2958° N, 76.6394° E (Simulated)"; }
   );
 };
 
