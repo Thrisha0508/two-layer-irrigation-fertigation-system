@@ -103,7 +103,7 @@
   .page.on { display: block; }
 
   .grid { display: grid; gap: 14px; }
-  .kpis { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 14px; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 14px; }
   .cols-2 { grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); }
   .map-layout { display: grid; gap: 14px; grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr); }
   @media (max-width: 960px) { .map-layout { grid-template-columns: 1fr; } }
@@ -127,7 +127,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
-  .kpi b { display: block; font-size: 23px; margin-top: 4px; }
+  .kpi b { display: block; font-size: 21px; margin-top: 4px; }
   .kpi span { font-size: 12px; color: var(--mut); }
 
   .toolbar {
@@ -164,7 +164,6 @@
   .warn { background: rgba(245, 176, 65, 0.2); color: var(--gold); }
   .crit { background: rgba(242, 95, 107, 0.22); color: var(--red); }
 
-  /* 3D Isometric Farmland Container */
   .stage-3d-wrap {
     perspective: 1400px;
     width: 100%;
@@ -237,7 +236,7 @@
 
   <div class="nav-footer">
     <strong>📦 Model &amp; Live Data</strong>
-    1,344 Training Records[cite: 1] + Live CSV Sync
+    1,344 Training Records + Live CSV Sync
     <button class="btn primary" id="btnDownloadLiveCsv" style="width:100%;margin-top:8px;font-size:11px;padding:6px">⬇ Download Live CSV</button>
   </div>
 </nav>
@@ -246,7 +245,7 @@
   <div class="topbar">
     <h2 id="pageTitle">Real 1.5-Acre Farm Land Topography &amp; Digital Twin</h2>
     <div class="status-group">
-      <div id="dataSourceBadge" class="data-badge">● STREAMING: LIVE CLOUD CSV &amp; 1,344 BASELINE[cite: 1]</div>
+      <div id="dataSourceBadge" class="data-badge">● STREAMING: LIVE CLOUD CSV &amp; 1,344 BASELINE</div>
       <div id="modeBadge" class="mode-banner mode-l1">LAYER 1 ACTIVE: WATER IRRIGATION</div>
     </div>
   </div>
@@ -262,11 +261,11 @@
         <option value="">🔍 Simulate Condition (from 1,344 Records)...</option>
         <option value="0">Normal Layer 1 Irrigation (IRR00001)</option>
         <option value="2">Normal Dual-Layer Fertigation (IRR00003)</option>
-        <option value="4">Fault: Pipeline Leakage (39 records)[cite: 1]</option>
-        <option value="6">Fault: Pipeline Blockage (21 records)[cite: 1]</option>
-        <option value="8">Fault: Waterlogging (13 records)[cite: 1]</option>
-        <option value="10">Fault: Unequal Distribution (12 records)[cite: 1]</option>
-        <option value="12">Fault: Low Water Tank (9 records)[cite: 1]</option>
+        <option value="4">Fault: Pipeline Leakage (39 records)</option>
+        <option value="6">Fault: Pipeline Blockage (21 records)</option>
+        <option value="8">Fault: Waterlogging (13 records)</option>
+        <option value="10">Fault: Unequal Distribution (12 records)</option>
+        <option value="12">Fault: Low Water Tank (9 records)</option>
       </select>
       <button class="btn" id="btnWalk">🚶 Walk Farmer</button>
       <button class="btn" id="btnGps">📍 Live GPS Origin</button>
@@ -291,7 +290,6 @@
         <div class="farm-3d-scene">
           <svg id="farmSvg" viewBox="0 0 860 420" style="width:100%;height:100%;display:block">
             <defs>
-              <!-- Real Farm Crop Bed Pattern -->
               <pattern id="realFarmland" width="24" height="24" patternUnits="userSpaceOnUse">
                 <rect width="24" height="24" fill="#0d2616" />
                 <path d="M 0 12 L 24 12" stroke="#173b22" stroke-width="3" />
@@ -300,13 +298,12 @@
               </pattern>
             </defs>
 
-            <!-- Farmland Boundary & Soil Base -->
             <rect width="860" height="420" fill="#0a1d12" rx="12" />
             <rect width="860" height="420" fill="url(#realFarmland)" rx="12" />
             <rect x="255" y="15" width="585" height="390" rx="14" fill="none" stroke="#2d6a4f" stroke-width="2.5" stroke-dasharray="10 5" />
             <text x="548" y="35" fill="#84a98c" font-size="11" font-weight="bold" text-anchor="middle">COMMERCIAL 1.5-ACRE CROP SECTORS (3 SOLENOID IRRIGATION ZONES)</text>
 
-            <!-- Zone 1: Drip Root Crop Plot -->
+            <!-- Zone 1 -->
             <g id="zone1Box">
               <rect id="z1Rect" x="280" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
               <rect x="350" y="200" width="30" height="18" rx="4" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
@@ -315,7 +312,7 @@
               <text x="365" y="213" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 1</text>
             </g>
 
-            <!-- Zone 2: Vegetable Canopy Plot -->
+            <!-- Zone 2 -->
             <g id="zone2Box">
               <rect id="z2Rect" x="468" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
               <rect x="538" y="200" width="30" height="18" rx="4" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
@@ -324,7 +321,7 @@
               <text x="553" y="213" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 2</text>
             </g>
 
-            <!-- Zone 3: Orchard Plot -->
+            <!-- Zone 3 -->
             <g id="zone3Box">
               <rect id="z3Rect" x="656" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
               <rect x="726" y="200" width="30" height="18" rx="4" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
@@ -333,7 +330,7 @@
               <text x="741" y="213" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 3</text>
             </g>
 
-            <!-- HARDWARE PUMP HOUSE & PLC ROOM -->
+            <!-- PUMP HOUSE -->
             <rect x="15" y="15" width="225" height="390" rx="12" fill="#07111e" stroke="#1f3a5f" stroke-width="2" />
             <text x="127" y="38" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">PUMP HOUSE &amp; PLC STATION</text>
 
@@ -352,7 +349,6 @@
             <text id="ecText" x="119" y="323" fill="#94a8c4" font-size="10" text-anchor="middle">EC: 0.00 mS/cm</text>
             <text id="valveText" x="119" y="341" fill="#94a8c4" font-size="9" text-anchor="middle">Backflow Valve: CLOSED</text>
 
-            <!-- Main Mainline & Lateral Irrigation Pipes -->
             <path d="M 153 177 L 740 177" stroke="#163052" stroke-width="10" stroke-linecap="round" fill="none" />
             <path id="mainPipeAnim" d="M 153 177 L 740 177" stroke="#4da6ff" stroke-width="8" stroke-linecap="round" fill="none" class="water-flow" />
 
@@ -365,7 +361,6 @@
             <path d="M 741 177 L 741 350" stroke="#163052" stroke-width="6" fill="none" />
             <path id="z3PipeAnim" d="M 741 177 L 741 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-            <!-- Fault & Farmer Avatars -->
             <g id="faultMarker" transform="translate(468, 177)" style="display:none">
               <circle cx="0" cy="0" r="14" fill="#f25f6b" />
               <text x="0" y="4" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">!</text>
@@ -386,39 +381,28 @@
           <div class="switch-row">
             <div>
               <label>Layer 1: Centrifugal Pump</label>
-              <small>Energizes 24V pump motor (Blue flow)</small>
+              <small>Energizes 24V pump motor</small>
             </div>
             <button class="btn active-toggle" id="swPump">ON</button>
           </div>
           <div class="switch-row">
             <div>
-              <label>Layer 2: Dosing Injector</label>
-              <small>Opens Venturi chemical valve (Gold/Teal)</small>
+              <label>Layer 2: Fertigation Interval</label>
+              <small id="fertScheduleStatus" style="color:var(--gold)">Scheduled: Every 3 Days (Rest: Pure Water)</small>
             </div>
-            <button class="btn" id="swFert">OFF</button>
+            <button class="btn" id="swFertSchedule">Trigger Fertigation</button>
           </div>
           <div class="switch-row">
             <div>
-              <label>Zone Solenoid Valves (Z1 / Z2 / Z3)</label>
-              <small>Click to toggle individual crop valves</small>
+              <label>Simulate Tank Overflow</label>
+              <small>Tests float sensor interlock (>95%)</small>
             </div>
-            <div style="display:flex;gap:4px">
-              <button class="btn active-toggle" id="swZ1">Z1</button>
-              <button class="btn active-toggle" id="swZ2">Z2</button>
-              <button class="btn active-toggle" id="swZ3">Z3</button>
-            </div>
-          </div>
-          <div class="switch-row">
-            <div>
-              <label>Simulate Pipeline Leak</label>
-              <small>Tests pressure drop &amp; proximity alarm</small>
-            </div>
-            <button class="btn danger" id="swFault">Inject Leak</button>
+            <button class="btn danger" id="swOverflow">Test Overflow</button>
           </div>
         </div>
 
         <div class="card">
-          <h3>🩺 Hardware Diagnostics &amp; Safety</h3>
+          <h3>🩺 Hardware Diagnostics &amp; Alerts</h3>
           <div id="diagBox" style="font-size:13px;line-height:1.5"></div>
         </div>
 
@@ -441,7 +425,7 @@
         </div>
       </div>
       <p style="font-size:13px;color:var(--mut);margin-bottom:14px;">
-        Trace how raw telemetry flows from field sensors into the cloud CSV repository, gets evaluated against the <strong>1,344-record training model</strong>[cite: 1], and trips 24V hardware relays.
+        Trace how raw telemetry flows from field sensors into the cloud CSV repository, gets evaluated against the <strong>1,344-record training model</strong>, and trips 24V hardware relays.
       </p>
 
       <svg viewBox="0 0 880 180" style="width:100%;height:auto;background:#040911;border-radius:10px;border:1px solid var(--line);display:block">
@@ -466,7 +450,7 @@
         <g>
           <rect x="470" y="30" width="160" height="120" rx="10" fill="#0b1728" stroke="#f5b041" stroke-width="2" />
           <text x="550" y="58" fill="#f5b041" font-size="11" font-weight="bold" text-anchor="middle">STAGE 3: AI VALIDATION</text>
-          <text x="550" y="80" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">1,344-Record Model[cite: 1]</text>
+          <text x="550" y="80" fill="#eef4fc" font-size="12" font-weight="bold" text-anchor="middle">1,344-Record Model</text>
           <text x="550" y="102" fill="#8fa6cb" font-size="10" text-anchor="middle">6 Anomaly Thresholds</text>
           <text x="550" y="125" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">● Real-Time Scoring</text>
         </g>
@@ -485,7 +469,7 @@
       <div class="card">
         <h3>📟 Live Packet Transformation Console</h3>
         <div class="console-box" id="pipelineConsole">
-          <div class="console-line">[SYS] Pipeline initialized. Linked to 1,344 historical records[cite: 1].</div>
+          <div class="console-line">[SYS] Pipeline initialized. Linked to 1,344 historical records.</div>
           <div class="console-line">[INFO] Click "⚡ Send &amp; Trace Live Packet" above to test live payload telemetry.</div>
         </div>
       </div>
@@ -501,7 +485,7 @@
             <label style="color:var(--mut);display:block;margin-bottom:3px">Test Solution EC (mS/cm): <span id="testEcVal" style="color:var(--gold);font-weight:700">1.85 mS</span></label>
             <input type="range" id="testEcSlider" min="0.0" max="3.5" step="0.05" value="1.85" style="width:100%;accent-color:var(--gold)">
           </div>
-          <button class="btn primary" id="btnTestThreshold" style="margin-top:4px">Evaluate against 1,344 Baseline Rules[cite: 1]</button>
+          <button class="btn primary" id="btnTestThreshold" style="margin-top:4px">Evaluate against 1,344 Baseline Rules</button>
         </div>
       </div>
     </div>
@@ -511,7 +495,7 @@
   <section class="page" id="analyticsTab">
     <div class="grid cols-2" style="margin-bottom:14px">
       <div class="card">
-        <h3>📊 1,344-Record Benchmark Dataset Distribution[cite: 1]</h3>
+        <h3>📊 1,344-Record Benchmark Dataset Distribution</h3>
         <div class="ch-box"><canvas id="datasetDistChart"></canvas></div>
       </div>
       <div class="card">
@@ -602,10 +586,10 @@
             <td>High pressure alert + Pump relief</td>
           </tr>
           <tr>
-            <td>Dosing Deviation</td>
-            <td>Layer 2</td>
-            <td><span class="pill warn">Medium</span></td>
-            <td>Adjust injector duty cycle</td>
+            <td>Tank Overflow (&gt;95%)</td>
+            <td>Layer 1</td>
+            <td><span class="pill crit">High</span></td>
+            <td>Auto-close main intake valve &amp; alert farmer</td>
           </tr>
           <tr>
             <td>Abnormal EC</td>
@@ -617,49 +601,49 @@
       </div>
 
       <div class="card" style="grid-column: span 2;">
-        <h3>1,344-Record Dataset Distribution Breakdown[cite: 1]</h3>
+        <h3>1,344-Record Dataset Distribution Breakdown</h3>
         <table>
           <tr>
             <th>Condition State</th>
-            <th>Record Count[cite: 1]</th>
+            <th>Record Count</th>
             <th>Percentage</th>
             <th>System Safety Action &amp; Interlock</th>
           </tr>
           <tr>
             <td><strong>Normal Operations</strong></td>
-            <td>1,250 records[cite: 1]</td>
+            <td>1,250 records</td>
             <td>93.0%</td>
             <td>Standard dual-layer water and nutrient distribution.</td>
           </tr>
           <tr>
             <td><strong>Pipeline Leakage</strong></td>
-            <td>39 records[cite: 1]</td>
+            <td>39 records</td>
             <td>2.9%</td>
             <td>Triggers pressure drop warning, audio proximity beeps, and isolates valves.</td>
           </tr>
           <tr>
             <td><strong>Pipeline Blockage</strong></td>
-            <td>21 records[cite: 1]</td>
+            <td>21 records</td>
             <td>1.6%</td>
             <td>Detects abnormal back-pressure spike; activates pump pressure relief.</td>
           </tr>
           <tr>
             <td><strong>Waterlogging</strong></td>
-            <td>13 records[cite: 1]</td>
+            <td>13 records</td>
             <td>1.0%</td>
             <td>High moisture cutoff (&gt;50%); pauses scheduled irrigation cycles.</td>
           </tr>
           <tr>
             <td><strong>Unequal Distribution</strong></td>
-            <td>12 records[cite: 1]</td>
+            <td>12 records</td>
             <td>0.9%</td>
             <td>Flags lateral flow variance across Zones 1, 2, and 3.</td>
           </tr>
           <tr>
-            <td><strong>Low Water Tank</strong></td>
-            <td>9 records[cite: 1]</td>
+            <td><strong>Low Water Tank / Overflow</strong></td>
+            <td>9 records</td>
             <td>0.7%</td>
-            <td>Prevents dry-run cavitation by de-energizing pumps (&lt;15% tank).</td>
+            <td>Prevents dry-run cavitation or tank spill by regulating valves.</td>
           </tr>
         </table>
       </div>
@@ -694,7 +678,7 @@ let state = {
   beepTimer: null,
   farmer: { x: 100, y: 240 },
   walkStep: 0,
-  manual: { pump: true, fert: false, z1: true, z2: true, z3: true, leak: false }
+  manual: { pump: true, fert: false, overflow: false }
 };
 
 const $ = id => document.getElementById(id);
@@ -732,7 +716,7 @@ async function loadLiveCsvData() {
       populateDatasetTable();
     }
   } catch (err) {
-    $("dataSourceBadge").textContent = "● 1,344-RECORD BASELINE & LIVE SYNC ACTIVE[cite: 1]";
+    $("dataSourceBadge").textContent = "● 1,344-RECORD BASELINE & LIVE SYNC ACTIVE";
   }
 }
 
@@ -765,10 +749,10 @@ $("btnSimulatePacket").onclick = () => {
   const sampleEC = (1.85 + (Math.random() * 0.1 - 0.05)).toFixed(2);
 
   const steps = [
-    `<div class="console-line"><span style="color:#4da6ff">[${now}] STAGE 1 (ESP32):</span> Read Start_Bar=${sampleP}b, Zone1_Flow=${sampleFlow}L/m, EC=${sampleEC}mS/cm.</div>`,
+    `<div class="console-line"><span style="color:#4da6ff">[${now}] STAGE 1 (ESP32):</span> Read Start_Bar=${sampleP}b, Tank Tank Level OK, EC=${sampleEC}mS/cm.</div>`,
     `<div class="console-line"><span style="color:#38d9c5">[${now}] STAGE 2 (CLOUD SYNC):</span> Appended telemetry packet to live CSV stream buffer.</div>`,
-    `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Evaluated against baseline model[cite: 1] -> Status: <strong>NORMAL</strong>.</div>`,
-    `<div class="console-line"><span style="color:#58d68d">[${now}] STAGE 4 (ACTUATION):</span> GPIO Relays maintained ON. Farmland 3D map updated.</div>`
+    `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Evaluated against baseline model -> Status: <strong>NORMAL</strong>.</div>`,
+    `<div class="console-line"><span style="color:#58d68d">[${now}] STAGE 4 (ACTUATION):</span> Fertigation scheduled correctly. No overflow detected.</div>`
   ];
 
   let stepIdx = 0;
@@ -792,7 +776,7 @@ $("btnTestThreshold").onclick = () => {
   const now = new Date().toLocaleTimeString();
 
   let verdict = "<span style='color:var(--green)'>NORMAL OPERATION</span>";
-  let action = "Maintained standard dual-layer flow.";
+  let action = "Maintained scheduled pure water / fertigation flow.";
   if (pVal < 2.7) {
     verdict = "<span style='color:var(--red)'>PIPELINE LEAKAGE DETECTED</span>";
     action = "Triggered pressure drop warning and isolated zone valves.";
@@ -811,42 +795,38 @@ function getCurrentData() {
   if (!state.manualMode) {
     const r = DATASET[state.idx] || DATASET[0];
     return {
-      id: r[0], time: r[1], irr: r[2], fert: r[3],
+      id: r[0], time: r[1], irr: r[2], fert: state.manual.fert ? 1 : r[3],
       pStart: r[4], pMid: r[5], pEnd: r[6],
-      wTank: r[7], fInlet: r[8], fZ1: r[9], fZ2: r[10], fZ3: r[11],
+      wTank: state.manual.overflow ? 98.5 : r[7], fInlet: r[8], fZ1: r[9], fZ2: r[10], fZ3: r[11],
       mZ1: r[12], mZ2: r[13], mZ3: r[14],
-      irrCond: r[15], faultSec: r[16],
-      fTank: r[17], targetDose: r[18], actualDose: r[19], ec: r[20],
-      injStat: r[21], valveStat: r[22], flushStat: r[23],
-      fertCond: r[24], fertRisk: r[25]
+      irrCond: state.manual.overflow ? "Tank Overflow" : r[15], faultSec: state.manual.overflow ? "Pump House" : r[16],
+      fTank: r[17], targetDose: r[18], actualDose: state.manual.fert ? 140.0 : r[19], ec: state.manual.fert ? 1.85 : r[20],
+      injStat: state.manual.fert ? "Active" : r[21], valveStat: state.manual.overflow ? "Closed (Overflow)" : r[22],
+      flushStat: r[23], fertCond: state.manual.fert ? "Scheduled Injection" : r[24], fertRisk: r[25]
     };
   } else {
     const m = state.manual;
-    const activeZones = (m.z1 ? 1 : 0) + (m.z2 ? 1 : 0) + (m.z3 ? 1 : 0);
-    const irr = m.pump && activeZones > 0 ? 1 : 0;
+    const irr = m.pump && !m.overflow ? 1 : 0;
     const fert = irr && m.fert ? 1 : 0;
     const baseFlow = irr ? 13.8 : 0;
-    const fZ1 = m.z1 ? baseFlow : 0;
-    const fZ2 = m.z2 ? baseFlow : 0;
-    const fZ3 = m.z3 ? baseFlow : 0;
-    const fInlet = +(fZ1 + fZ2 + fZ3 + (m.leak && irr ? 6.5 : 0)).toFixed(1);
-    const pStart = irr ? (m.leak ? 2.55 : 3.22) : 0.0;
-    const pMid = irr ? (m.leak ? 1.88 : (fert ? 2.76 : 2.86)) : 0.0;
-    const pEnd = irr ? (m.leak ? 1.45 : (fert ? 2.42 : 2.52)) : 0.0;
+    const fInlet = +(baseFlow * 3).toFixed(1);
+    const pStart = irr ? (m.overflow ? 3.85 : 3.22) : 0.0;
+    const pMid = irr ? (m.overflow ? 3.40 : 2.86) : 0.0;
+    const pEnd = irr ? (m.overflow ? 3.10 : 2.52) : 0.0;
     return {
       id: "MANUAL-LIVE", time: "Live Override", irr, fert,
       pStart, pMid, pEnd,
-      wTank: 79.5, fInlet, fZ1, fZ2, fZ3,
-      mZ1: 38.2, mZ2: 36.8, mZ3: 34.5,
-      irrCond: m.leak && irr ? "Leakage" : "Normal",
-      faultSec: m.leak && irr ? "Start-Middle" : "",
+      wTank: m.overflow ? 98.5 : 79.5, fInlet, fZ1: baseFlow, fZ2: baseFlow, fZ3: baseFlow,
+      mZ1: m.overflow ? 56.2 : 38.2, mZ2: 36.8, mZ3: 34.5,
+      irrCond: m.overflow ? "Tank Overflow" : "Normal",
+      faultSec: m.overflow ? "Pump House" : "",
       fTank: 81.0, targetDose: fert ? 145.0 : 0.0,
       actualDose: fert ? 144.5 : 0.0, ec: fert ? 1.92 : 0.0,
       injStat: fert ? "Active" : "Inactive",
-      valveStat: fert ? "Open" : "Closed",
-      flushStat: fert ? "Required Post-Cycle" : "Not Required",
-      fertCond: fert ? "Normal Injection" : "Not Active",
-      fertRisk: fert ? "Low" : "Not Applicable"
+      valveStat: m.overflow ? "Closed (Overflow)" : "Open",
+      flushStat: "Not Required",
+      fertCond: fert ? "Scheduled Injection" : "Pure Water Schedule",
+      fertRisk: "Low"
     };
   }
 }
@@ -854,15 +834,18 @@ function getCurrentData() {
 function updateUI() {
   const d = getCurrentData();
   const badge = $("modeBadge");
-  if (!d.irr) {
+  if (state.manual.overflow) {
+    badge.className = "mode-banner mode-off";
+    badge.textContent = "CRITICAL ALERT: WATER TANK OVERFLOW (>95%) - INTAKE CLOSED";
+  } else if (!d.irr) {
     badge.className = "mode-banner mode-off";
     badge.textContent = "SYSTEM IDLE: PUMP & VALVES DE-ENERGIZED";
   } else if (d.irr && !d.fert) {
     badge.className = "mode-banner mode-l1";
-    badge.textContent = "LAYER 1 ACTIVE: PURE WATER IRRIGATION (BLUE)";
+    badge.textContent = "LAYER 1 ACTIVE: PURE WATER IRRIGATION (SCHEDULED)";
   } else {
     badge.className = "mode-banner mode-l2";
-    badge.textContent = "BOTH LAYERS ACTIVE: IRRIGATION + FERTIGATION (GOLD / TEAL)";
+    badge.textContent = "BOTH LAYERS ACTIVE: IRRIGATION + SCHEDULED FERTIGATION";
   }
 
   $("timeSlider").max = DATASET.length - 1;
@@ -870,16 +853,16 @@ function updateUI() {
   $("timeLabel").textContent = state.manualMode ? "MANUAL CONTROL MODE" : `${d.id} · ${d.time}`;
 
   $("kpiStrip").innerHTML = `
-    <div class="card kpi"><span>Operating Layer</span><b style="color:${d.fert ? 'var(--gold)' : (d.irr ? 'var(--blue)' : 'var(--mut)')}">${d.fert ? 'Layer 1 + 2' : (d.irr ? 'Layer 1 Only' : 'Standby')}</b></div>
+    <div class="card kpi"><span>Operating Layer</span><b style="color:${d.fert ? 'var(--gold)' : (d.irr ? 'var(--blue)' : 'var(--mut)')}">${d.fert ? 'Irrigation + Fert' : 'Pure Water Only'}</b></div>
+    <div class="card kpi"><span>Water Tank Level</span><b style="color:${d.wTank > 95 ? 'var(--red)' : 'var(--teal)'}">${d.wTank}%</b></div>
     <div class="card kpi"><span>Inlet Flow Rate</span><b>${d.fInlet} L/m</b></div>
-    <div class="card kpi"><span>Pressure (S / M / E)</span><b>${d.pStart} / ${d.pMid} / ${d.pEnd} b</b></div>
     <div class="card kpi"><span>Fertilizer Dose</span><b style="color:${d.fert ? 'var(--gold)' : 'var(--mut)'}">${d.actualDose} ml/m</b></div>
     <div class="card kpi"><span>Solution EC</span><b style="color:${d.ec > 2.6 ? 'var(--red)' : 'var(--teal)'}">${d.ec.toFixed(2)} mS/cm</b></div>
   `;
 
   const pipeColor = d.fert ? "#38d9c5" : "#4da6ff";
   const mainAnim = $("mainPipeAnim");
-  mainAnim.style.opacity = d.irr ? "1" : "0";
+  mainAnim.style.opacity = (d.irr && !state.manual.overflow) ? "1" : "0";
   mainAnim.setAttribute("stroke", pipeColor);
 
   [
@@ -888,28 +871,28 @@ function updateUI() {
     { anim: "z3PipeAnim", flow: d.fZ3, sub: "z3Sub", m: d.mZ3, rect: "z3Rect" }
   ].forEach(z => {
     const el = $(z.anim);
-    el.style.opacity = (d.irr && z.flow > 0) ? "1" : "0";
+    el.style.opacity = (d.irr && z.flow > 0 && !state.manual.overflow) ? "1" : "0";
     el.setAttribute("stroke", pipeColor);
     $(z.sub).textContent = `Moisture: ${z.m}%`;
     $(z.rect).setAttribute("fill", z.m > 50 ? "#113824" : "#13301f");
   });
 
-  $("waterTankText").textContent = `Tank: ${d.wTank}%`;
+  $("waterTankText").textContent = `Tank: ${d.wTank}% ${d.wTank > 95 ? '(OVERFLOW!)' : ''}`;
   $("pumpPressText").textContent = `Start: ${d.pStart} bar`;
   $("fertTankText").textContent = `Chem Tank: ${d.fTank}%`;
   $("ecText").textContent = `EC: ${d.ec.toFixed(2)} mS/cm`;
   $("valveText").textContent = `Valve: ${d.valveStat.toUpperCase()}`;
 
   const hasIrrFault = d.irrCond !== "Normal";
-  const hasFertFault = d.fertCond !== "Not Active" && d.fertCond !== "Normal Injection";
-  const activeFault = hasIrrFault ? d.irrCond : (hasFertFault ? d.fertCond : null);
+  const hasFertFault = d.fertCond !== "Not Active" && d.fertCond !== "Normal Injection" && d.fertCond !== "Scheduled Injection";
+  const activeFault = state.manual.overflow ? "Tank Overflow" : (hasIrrFault ? d.irrCond : (hasFertFault ? d.fertCond : null));
 
   const fm = $("faultMarker");
   let faultCoords = { x: 468, y: 177 };
   if (activeFault) {
-    if (d.faultSec.includes("Start")) faultCoords = { x: 320, y: 177 };
+    if (state.manual.overflow) faultCoords = { x: 90, y: 150 };
+    else if (d.faultSec.includes("Start")) faultCoords = { x: 320, y: 177 };
     else if (d.faultSec.includes("End") || d.faultSec.includes("Zone 3")) faultCoords = { x: 710, y: 177 };
-    else if (d.faultSec.includes("Zone 1")) faultCoords = { x: 365, y: 250 };
     fm.setAttribute("transform", `translate(${faultCoords.x}, ${faultCoords.y})`);
     $("faultMarkerLabel").textContent = activeFault.toUpperCase();
     fm.style.display = "block";
@@ -921,21 +904,21 @@ function updateUI() {
 
   $("diagBox").innerHTML = `
     <div style="margin-bottom:6px">
-      <strong>Layer 1 (Irrigation):</strong> <span class="pill ${hasIrrFault ? 'crit' : 'ok'}">${d.irrCond}</span>
-      ${d.faultSec ? `<span style="color:var(--mut);font-size:12px"> (${d.faultSec})</span>` : ""}
+      <strong>Irrigation State:</strong> <span class="pill ${state.manual.overflow ? 'crit' : 'ok'}">${d.irrCond}</span>
     </div>
     <div style="margin-bottom:8px">
-      <strong>Layer 2 (Fertigation):</strong> <span class="pill ${hasFertFault ? 'warn' : 'ok'}">${d.fertCond}</span>
+      <strong>Fertigation Schedule:</strong> <span class="pill ${d.fert ? 'warn' : 'ok'}">${d.fertCond}</span>
     </div>
     <div style="font-size:12px;color:var(--mut)">
-      • <strong>Hardware Interlock:</strong> ${d.fert ? "Venturi active, backflow check-valve OPEN." : (d.irr ? "Centrifugal pump running, chemical solenoid CLOSED." : "All GPIO relays LOW.")}
+      • <strong>Overflow Protection:</strong> ${state.manual.overflow ? "Float sensor tripped! Main intake valve forcibly CLOSED." : "Water level normal. Float sensor active."}<br>
+      • <strong>Nutrient Cycle:</strong> ${d.fert ? "Active injection phase (Scheduled day 3)." : "Pure water supply phase (Protecting roots from burn)."}
     </div>
   `;
 
   if (activeFault) {
     const key = `${d.id}-${activeFault}`;
     if (!logs.some(l => l.key === key)) {
-      logs.unshift({ key, idx: state.idx, time: d.time, title: activeFault, sec: d.faultSec || "Fertilizer Unit" });
+      logs.unshift({ key, idx: state.idx, time: d.time, title: activeFault, sec: d.faultSec || "Pump House" });
       logs = logs.slice(0, 10);
       renderLog();
     }
@@ -948,7 +931,7 @@ function renderLog() {
         <span class="pill crit">⚠ ${l.title}</span> <strong>${l.sec}</strong>
         <span style="float:right;color:var(--mut)">${l.time}</span>
       </div>`).join("")
-    : `<div style="font-size:12px;color:var(--mut)">No hardware faults logged yet. Select a condition above or click "Inject Leak".</div>`;
+    : `<div style="font-size:12px;color:var(--mut)">No hardware alerts logged. System operating on scheduled irrigation intervals.</div>`;
 }
 
 function jumpToRecord(i) {
@@ -1028,21 +1011,23 @@ function syncManualSwitches() {
   $("btnModeToggle").textContent = "🎛️ Mode: Manual Override";
   $("swPump").textContent = state.manual.pump ? "ON" : "OFF";
   $("swPump").classList.toggle("active-toggle", state.manual.pump);
-  $("swFert").textContent = state.manual.fert ? "ON" : "OFF";
-  $("swFert").classList.toggle("active-toggle", state.manual.fert);
-  ["z1", "z2", "z3"].forEach(z => {
-    $("sw" + z.toUpperCase()).classList.toggle("active-toggle", state.manual[z]);
-  });
-  $("swFault").textContent = state.manual.leak ? "Clear Leak" : "Inject Leak";
+  
+  const fertBtn = $("swFertSchedule");
+  fertBtn.textContent = state.manual.fert ? "Active (Fertilizing)" : "Trigger Fertigation";
+  fertBtn.classList.toggle("active-toggle", state.manual.fert);
+  $("fertScheduleStatus").textContent = state.manual.fert ? "Status: Injecting Nutrients Today" : "Scheduled: Pure Water Supply";
+
+  const overflowBtn = $("swOverflow");
+  overflowBtn.textContent = state.manual.overflow ? "Clear Overflow" : "Test Overflow";
+  overflowBtn.classList.toggle("danger", !state.manual.overflow);
+  overflowBtn.classList.toggle("active-toggle", state.manual.overflow);
+
   updateUI();
 }
 
 $("swPump").onclick = () => { state.manual.pump = !state.manual.pump; syncManualSwitches(); };
-$("swFert").onclick = () => { state.manual.fert = !state.manual.fert; syncManualSwitches(); };
-$("swZ1").onclick = () => { state.manual.z1 = !state.manual.z1; syncManualSwitches(); };
-$("swZ2").onclick = () => { state.manual.z2 = !state.manual.z2; syncManualSwitches(); };
-$("swZ3").onclick = () => { state.manual.z3 = !state.manual.z3; syncManualSwitches(); };
-$("swFault").onclick = () => { state.manual.leak = !state.manual.leak; syncManualSwitches(); };
+$("swFertSchedule").onclick = () => { state.manual.fert = !state.manual.fert; syncManualSwitches(); };
+$("swOverflow").onclick = () => { state.manual.overflow = !state.manual.overflow; syncManualSwitches(); };
 
 function downloadCsvFile() {
   const header = "Record_ID,Timestamp,Layer1_Irr,Layer2_Fert,Start_Bar,Mid_Bar,End_Bar,Water_Tank_Pct,Inlet_Flow_Lm,Z1_Flow,Z2_Flow,Z3_Flow,Z1_Moist,Z2_Moist,Z3_Moist,Irrigation_Condition,Fault_Section,Fert_Tank_Pct,Target_Dose,Actual_Dose,EC_mScm,Injector_Status,Backflow_Valve,Flush_Status,Fert_Condition,Risk_Level\n";
@@ -1087,7 +1072,7 @@ function renderCharts() {
     data: {
       labels: ["Normal (1,250)", "Leakage (39)", "Blockage (21)", "Waterlogging (13)", "Unequal (12)", "Low Tank (9)"],
       datasets: [{
-        label: "1,344 Total Benchmark Records[cite: 1]",
+        label: "1,344 Total Benchmark Records",
         data: [1250, 39, 21, 13, 12, 9],
         backgroundColor: ["#58d68d", "#f25f6b", "#f5b041", "#4da6ff", "#38d9c5", "#a569bd"]
       }]
