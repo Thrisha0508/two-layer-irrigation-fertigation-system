@@ -182,11 +182,11 @@
     position: relative;
   }
 
+  .hw-node { cursor: pointer; transition: filter 0.2s; }
+  .hw-node:hover { filter: drop-shadow(0 0 8px rgba(56, 217, 197, 0.75)); }
+
   @keyframes flowDash { to { stroke-dashoffset: -36; } }
-  @keyframes electronPulse { to { stroke-dashoffset: -24; } }
   .water-flow { stroke-dasharray: 10 8; animation: flowDash 0.8s linear infinite; }
-  .fert-flow { stroke-dasharray: 8 6; animation: flowDash 0.6s linear infinite; }
-  .electron-wire { stroke-dasharray: 4 8; animation: electronPulse 0.5s linear infinite; }
 
   .switch-row {
     display: flex;
@@ -222,6 +222,40 @@
     overflow-y: auto;
   }
   .console-line { margin-bottom: 6px; border-bottom: 1px dashed #162642; padding-bottom: 4px; }
+
+  /* Hardware Inspection Modal */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 11, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    background: var(--panel);
+    border: 1px solid var(--teal);
+    border-radius: 14px;
+    max-width: 440px;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.65);
+  }
+  .modal-card h4 { margin: 0 0 6px; color: var(--teal); font-size: 16px; }
+  .modal-card p { margin: 0 0 14px; font-size: 13px; color: var(--mut); line-height: 1.5; }
+  .modal-specs {
+    background: #040911;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
 </style>
 </head>
 <body>
@@ -282,8 +316,8 @@
 
     <div class="map-layout">
       <div class="stage-3d-wrap">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <h3 style="margin:0;color:var(--teal)">🌾 1.5-Acre Agricultural Farmland (Topography Grid)</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+          <h3 style="margin:0;color:var(--teal)">🌾 1.5-Acre Agricultural Farmland (Click any Hardware Component to Inspect/Toggle)</h3>
           <span id="gpsReadout" style="font-size:11px;color:var(--mut)">Pump House Origin (0,0) · 12.2958° N, 76.6394° E</span>
         </div>
 
@@ -301,75 +335,124 @@
             <rect width="860" height="420" fill="#0a1d12" rx="12" />
             <rect width="860" height="420" fill="url(#realFarmland)" rx="12" />
             <rect x="255" y="15" width="585" height="390" rx="14" fill="none" stroke="#2d6a4f" stroke-width="2.5" stroke-dasharray="10 5" />
-            <text x="548" y="35" fill="#84a98c" font-size="11" font-weight="bold" text-anchor="middle">COMMERCIAL 1.5-ACRE CROP SECTORS (3 SOLENOID IRRIGATION ZONES)</text>
+            <text x="548" y="35" fill="#84a98c" font-size="11" font-weight="bold" text-anchor="middle">COMMERCIAL 1.5-ACRE CROP SECTORS (CLICK VALVES OR SENSORS TO INSPECT)</text>
 
             <!-- Zone 1 -->
             <g id="zone1Box">
               <rect id="z1Rect" x="280" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
-              <rect x="350" y="200" width="30" height="18" rx="4" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
               <text x="365" y="80" fill="#d8f3dc" font-size="13" font-weight="bold" text-anchor="middle">ZONE 1: ROOT CROPS</text>
               <text id="z1Sub" x="365" y="98" fill="#b7e4c7" font-size="11" text-anchor="middle">Moisture: 38.6%</text>
-              <text x="365" y="213" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 1</text>
+              
+              <!-- Physical Soil Sensor 1 -->
+              <g class="hw-node" onclick="inspectHardware('soil1')">
+                <rect x="310" y="295" width="110" height="38" rx="6" fill="#07131e" stroke="#58d68d" stroke-width="1.5" />
+                <text x="365" y="311" fill="#58d68d" font-size="9" font-weight="bold" text-anchor="middle">🌱 CAPACITIVE SENSOR 1</text>
+                <text id="z1SensorTxt" x="365" y="324" fill="#eef4fc" font-size="9" text-anchor="middle">38.6% VWC · Tap</text>
+              </g>
             </g>
 
             <!-- Zone 2 -->
             <g id="zone2Box">
               <rect id="z2Rect" x="468" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
-              <rect x="538" y="200" width="30" height="18" rx="4" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
               <text x="553" y="80" fill="#d8f3dc" font-size="13" font-weight="bold" text-anchor="middle">ZONE 2: VEGETABLES</text>
               <text id="z2Sub" x="553" y="98" fill="#b7e4c7" font-size="11" text-anchor="middle">Moisture: 34.2%</text>
-              <text x="553" y="213" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 2</text>
+
+              <!-- Physical Soil Sensor 2 -->
+              <g class="hw-node" onclick="inspectHardware('soil2')">
+                <rect x="498" y="295" width="110" height="38" rx="6" fill="#07131e" stroke="#58d68d" stroke-width="1.5" />
+                <text x="553" y="311" fill="#58d68d" font-size="9" font-weight="bold" text-anchor="middle">🌱 CAPACITIVE SENSOR 2</text>
+                <text id="z2SensorTxt" x="553" y="324" fill="#eef4fc" font-size="9" text-anchor="middle">34.2% VWC · Tap</text>
+              </g>
             </g>
 
             <!-- Zone 3 -->
             <g id="zone3Box">
               <rect id="z3Rect" x="656" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
-              <rect x="726" y="200" width="30" height="18" rx="4" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
               <text x="741" y="80" fill="#d8f3dc" font-size="13" font-weight="bold" text-anchor="middle">ZONE 3: ORCHARD</text>
               <text id="z3Sub" x="741" y="98" fill="#b7e4c7" font-size="11" text-anchor="middle">Moisture: 24.9%</text>
-              <text x="741" y="213" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 3</text>
+
+              <!-- Physical Soil Sensor 3 -->
+              <g class="hw-node" onclick="inspectHardware('soil3')">
+                <rect x="686" y="295" width="110" height="38" rx="6" fill="#07131e" stroke="#58d68d" stroke-width="1.5" />
+                <text x="741" y="311" fill="#58d68d" font-size="9" font-weight="bold" text-anchor="middle">🌱 CAPACITIVE SENSOR 3</text>
+                <text id="z3SensorTxt" x="741" y="324" fill="#eef4fc" font-size="9" text-anchor="middle">24.9% VWC · Tap</text>
+              </g>
             </g>
 
             <!-- PUMP HOUSE -->
             <rect x="15" y="15" width="225" height="390" rx="12" fill="#07111e" stroke="#1f3a5f" stroke-width="2" />
             <text x="127" y="38" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">PUMP HOUSE &amp; PLC STATION</text>
 
-            <rect x="28" y="52" width="198" height="52" rx="6" fill="#0d1b2a" stroke="#38d9c5" stroke-width="2" />
-            <text x="127" y="74" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">ESP32 IOT CONTROLLER</text>
-            <text id="plcStateText" x="127" y="90" fill="#38d9c5" font-size="9" text-anchor="middle">24V Relays Active (Dual-Layer)</text>
+            <!-- Clickable ESP32 Controller -->
+            <g class="hw-node" onclick="inspectHardware('esp32')">
+              <rect x="28" y="52" width="198" height="52" rx="6" fill="#0d1b2a" stroke="#38d9c5" stroke-width="2" />
+              <text x="127" y="74" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">🔌 ESP32 IOT CONTROLLER</text>
+              <text id="plcStateText" x="127" y="90" fill="#38d9c5" font-size="9" text-anchor="middle">24V Relays Active · Tap to Inspect</text>
+            </g>
 
-            <rect x="28" y="135" width="125" height="85" rx="8" fill="#0f223d" stroke="#4da6ff" stroke-width="2" />
-            <text x="90" y="157" fill="#4da6ff" font-size="10" font-weight="bold" text-anchor="middle">CENTRIFUGAL PUMP</text>
-            <text id="waterTankText" x="90" y="179" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Tank: 78.7%</text>
-            <text id="pumpPressText" x="90" y="197" fill="#94a8c4" font-size="9" text-anchor="middle">Start: 3.19 bar</text>
+            <!-- Clickable Centrifugal Pump & Water Tank -->
+            <g class="hw-node" onclick="inspectHardware('pump')">
+              <rect x="28" y="122" width="198" height="105" rx="8" fill="#0f223d" stroke="#4da6ff" stroke-width="2" />
+              <text x="127" y="143" fill="#4da6ff" font-size="10" font-weight="bold" text-anchor="middle">⚙️ CENTRIFUGAL PUMP &amp; TANK</text>
+              <text id="waterTankText" x="127" y="164" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Water Tank: 78.7%</text>
+              <text id="pumpPressText" x="127" y="182" fill="#94a8c4" font-size="10" text-anchor="middle">Start Pressure: 3.19 bar</text>
+              <text x="127" y="202" fill="#38d9c5" font-size="9" text-anchor="middle">[Click to Inspect / Toggle Pump]</text>
+            </g>
 
-            <rect id="fertBox" x="28" y="260" width="182" height="125" rx="8" fill="#241e15" stroke="#665233" stroke-width="2" />
-            <text x="119" y="282" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">VENTURI INJECTOR</text>
-            <text id="fertTankText" x="119" y="304" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Chem Tank: 84.0%</text>
-            <text id="ecText" x="119" y="323" fill="#94a8c4" font-size="10" text-anchor="middle">EC: 0.00 mS/cm</text>
-            <text id="valveText" x="119" y="341" fill="#94a8c4" font-size="9" text-anchor="middle">Backflow Valve: CLOSED</text>
+            <!-- Clickable Venturi Fertilizer Injector -->
+            <g class="hw-node" onclick="inspectHardware('venturi')">
+              <rect id="fertBox" x="28" y="248" width="198" height="138" rx="8" fill="#241e15" stroke="#f5b041" stroke-width="2" />
+              <text x="127" y="270" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">🧪 VENTURI FERTIGATION UNIT</text>
+              <text id="fertTankText" x="127" y="292" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">Chem Tank: 84.0%</text>
+              <text id="ecText" x="127" y="311" fill="#94a8c4" font-size="10" text-anchor="middle">EC: 0.00 mS/cm</text>
+              <text id="valveText" x="127" y="330" fill="#94a8c4" font-size="9" text-anchor="middle">Backflow Valve: CLOSED</text>
+              <text x="127" y="352" fill="#f5b041" font-size="9" text-anchor="middle">[Click to Inspect / Toggle Schedule]</text>
+            </g>
 
-            <path d="M 153 177 L 740 177" stroke="#163052" stroke-width="10" stroke-linecap="round" fill="none" />
-            <path id="mainPipeAnim" d="M 153 177 L 740 177" stroke="#4da6ff" stroke-width="8" stroke-linecap="round" fill="none" class="water-flow" />
+            <!-- Mainline & Zone Pipes -->
+            <path d="M 226 175 L 741 175" stroke="#163052" stroke-width="10" stroke-linecap="round" fill="none" />
+            <path id="mainPipeAnim" d="M 226 175 L 741 175" stroke="#4da6ff" stroke-width="8" stroke-linecap="round" fill="none" class="water-flow" />
 
-            <path d="M 365 177 L 365 350" stroke="#163052" stroke-width="6" fill="none" />
-            <path id="z1PipeAnim" d="M 365 177 L 365 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
+            <path d="M 365 175 L 365 290" stroke="#163052" stroke-width="6" fill="none" />
+            <path id="z1PipeAnim" d="M 365 175 L 365 290" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-            <path d="M 553 177 L 553 350" stroke="#163052" stroke-width="6" fill="none" />
-            <path id="z2PipeAnim" d="M 553 177 L 553 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
+            <path d="M 553 175 L 553 290" stroke="#163052" stroke-width="6" fill="none" />
+            <path id="z2PipeAnim" d="M 553 175 L 553 290" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-            <path d="M 741 177 L 741 350" stroke="#163052" stroke-width="6" fill="none" />
-            <path id="z3PipeAnim" d="M 741 177 L 741 350" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
+            <path d="M 741 175 L 741 290" stroke="#163052" stroke-width="6" fill="none" />
+            <path id="z3PipeAnim" d="M 741 175 L 741 290" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-            <g id="faultMarker" transform="translate(468, 177)" style="display:none">
+            <!-- Clickable Solenoid Valves on Lateral Lines -->
+            <g class="hw-node" onclick="inspectHardware('valve1')">
+              <rect x="330" y="198" width="70" height="24" rx="5" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
+              <text id="v1Txt" x="365" y="214" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 1: ON</text>
+            </g>
+            <g class="hw-node" onclick="inspectHardware('valve2')">
+              <rect x="518" y="198" width="70" height="24" rx="5" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
+              <text id="v2Txt" x="553" y="214" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 2: ON</text>
+            </g>
+            <g class="hw-node" onclick="inspectHardware('valve3')">
+              <rect x="706" y="198" width="70" height="24" rx="5" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
+              <text id="v3Txt" x="741" y="214" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 3: ON</text>
+            </g>
+
+            <!-- Clickable Pressure Transducers -->
+            <g class="hw-node" onclick="inspectHardware('pressureMid')">
+              <circle cx="458" cy="175" r="11" fill="#0b1728" stroke="#f5b041" stroke-width="2" />
+              <text x="458" y="178" fill="#f5b041" font-size="8" font-weight="bold" text-anchor="middle">PSI</text>
+            </g>
+
+            <!-- Fault Marker -->
+            <g id="faultMarker" transform="translate(468, 175)" style="display:none">
               <circle cx="0" cy="0" r="14" fill="#f25f6b" />
               <text x="0" y="4" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">!</text>
               <text id="faultMarkerLabel" x="0" y="28" fill="#ff9aa2" font-size="11" font-weight="bold" text-anchor="middle">LEAK</text>
             </g>
 
-            <g id="farmerMarker" transform="translate(100, 240)">
-              <circle cx="0" cy="0" r="12" fill="#38d9c5" stroke="#040810" stroke-width="2" />
-              <text x="0" y="4" fill="#040810" font-size="10" font-weight="bold" text-anchor="middle">👨‍🌾</text>
+            <!-- Draggable Farmer Avatar -->
+            <g id="farmerMarker" transform="translate(260, 240)" style="cursor:grab">
+              <circle cx="0" cy="0" r="13" fill="#38d9c5" stroke="#040810" stroke-width="2" />
+              <text x="0" y="4" fill="#040810" font-size="11" font-weight="bold" text-anchor="middle">👨‍🌾</text>
             </g>
           </svg>
         </div>
@@ -395,7 +478,7 @@
           <div class="switch-row">
             <div>
               <label>Simulate Tank Overflow</label>
-              <small>Tests float sensor interlock (>95%)</small>
+              <small>Tests float sensor interlock (&gt;95%)</small>
             </div>
             <button class="btn danger" id="swOverflow">Test Overflow</button>
           </div>
@@ -470,7 +553,7 @@
         <h3>📟 Live Packet Transformation Console</h3>
         <div class="console-box" id="pipelineConsole">
           <div class="console-line">[SYS] Pipeline initialized. Linked to 1,344 historical records.</div>
-          <div class="console-line">[INFO] Click "⚡ Send &amp; Trace Live Packet" above to test live payload telemetry.</div>
+          <div class="console-line">[INFO] Click any hardware component on the 3D map to inspect live sensors.</div>
         </div>
       </div>
 
@@ -651,6 +734,19 @@
   </section>
 </main>
 
+<!-- HARDWARE INSPECTION MODAL -->
+<div class="modal-backdrop" id="hwModal">
+  <div class="modal-card">
+    <h4 id="modalTitle">Hardware Component Inspection</h4>
+    <p id="modalDesc">Live hardware diagnostic status.</p>
+    <div class="modal-specs" id="modalSpecs"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn primary" id="modalActionBtn" style="display:none">Toggle State</button>
+      <button class="btn" onclick="closeHwModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let DATASET = [
   ["IRR00001","10-01 06:00",1,0,3.19,2.83,2.50,78.7,42.9,13.6,12.7,13.5,38.6,34.2,24.9,"Normal","",84.0,0,0,0,"Inactive","Closed","Not Required","Not Active","Not Applicable"],
@@ -676,14 +772,121 @@ let state = {
   alarmOn: false,
   audioCtx: null,
   beepTimer: null,
-  farmer: { x: 100, y: 240 },
+  farmer: { x: 260, y: 240 },
   walkStep: 0,
-  manual: { pump: true, fert: false, overflow: false }
+  manual: { pump: true, fert: false, overflow: false, v1: true, v2: true, v3: true }
 };
 
 const $ = id => document.getElementById(id);
 let logs = [];
 let flowChartObj = null, pressChartObj = null, distChartObj = null, liveFluctTimer = null;
+
+// Interactive Hardware Inspection Logic
+function inspectHardware(key) {
+  const d = getCurrentData();
+  const modal = $("hwModal");
+  const titleEl = $("modalTitle");
+  const descEl = $("modalDesc");
+  const specsEl = $("modalSpecs");
+  const actBtn = $("modalActionBtn");
+
+  actBtn.style.display = "none";
+  actBtn.onclick = null;
+
+  if (key === "pump") {
+    titleEl.textContent = "⚙️ Centrifugal Pump & Water Reservoir";
+    descEl.textContent = "Primary Layer 1 hydraulic pressure unit driving clean water across the 1.5-acre mainline.";
+    specsEl.innerHTML = `
+      • <strong>Pump Status:</strong> ${d.irr ? "RUNNING (24V Relay ON)" : "STOPPED"}<br>
+      • <strong>Reservoir Level:</strong> ${d.wTank}% ${d.wTank > 95 ? "(⚠️ OVERFLOW FLOAT TRIPPED)" : ""}<br>
+      • <strong>Discharge Pressure:</strong> ${d.pStart} bar<br>
+      • <strong>Inlet Flow Rate:</strong> ${d.fInlet} L/min
+    `;
+    actBtn.style.display = "inline-block";
+    actBtn.textContent = state.manual.pump ? "Stop Pump" : "Start Pump";
+    actBtn.onclick = () => { state.manual.pump = !state.manual.pump; syncManualSwitches(); inspectHardware("pump"); };
+  } else if (key === "venturi") {
+    titleEl.textContent = "🧪 Venturi Fertigation Injector";
+    descEl.textContent = "Layer 2 nutrient dosing unit. Operates on scheduled crop intervals using Layer 1 water flow suction.";
+    specsEl.innerHTML = `
+      • <strong>Injector State:</strong> ${d.fert ? "ACTIVE (Scheduled Nutrient Cycle)" : "STANDBY (Pure Water Phase)"}<br>
+      • <strong>Chemical Tank Level:</strong> ${d.fTank}%<br>
+      • <strong>Dosing Rate:</strong> ${d.actualDose} ml/min<br>
+      • <strong>Solution EC:</strong> ${d.ec.toFixed(2)} mS/cm · Backflow Valve: ${d.valveStat.toUpperCase()}
+    `;
+    actBtn.style.display = "inline-block";
+    actBtn.textContent = state.manual.fert ? "Switch to Pure Water" : "Trigger Fertigation";
+    actBtn.onclick = () => { state.manual.fert = !state.manual.fert; syncManualSwitches(); inspectHardware("venturi"); };
+  } else if (key === "esp32") {
+    titleEl.textContent = "🔌 ESP32 Edge IoT Controller";
+    descEl.textContent = "Dual-core microcontroller handling sensor polling, safety interlocks, and cloud CSV synchronization.";
+    specsEl.innerHTML = `
+      • <strong>Telemetry Sync:</strong> Active (1,344-Record Baseline)<br>
+      • <strong>Relay Bank:</strong> 4-Channel 24V Opto-Isolated<br>
+      • <strong>Safety Interlocks:</strong> Overflow Cutoff + Pressure Drop Guard
+    `;
+  } else if (key === "valve1" || key === "valve2" || key === "valve3") {
+    const zNum = key.slice(-1);
+    const vKey = "v" + zNum;
+    const isOpen = state.manual[vKey] && d.irr && !state.manual.overflow;
+    const flowVal = zNum === "1" ? d.fZ1 : (zNum === "2" ? d.fZ2 : d.fZ3);
+    titleEl.textContent = `🚰 Zone ${zNum} Solenoid Control Valve`;
+    descEl.textContent = `24V AC normally-closed solenoid valve regulating lateral flow to Zone ${zNum}.`;
+    specsEl.innerHTML = `
+      • <strong>Valve Position:</strong> ${isOpen ? "OPEN (Irrigating)" : "CLOSED"}<br>
+      • <strong>Zone Flow Rate:</strong> ${isOpen ? flowVal : 0} L/min
+    `;
+    actBtn.style.display = "inline-block";
+    actBtn.textContent = state.manual[vKey] ? `Close Valve ${zNum}` : `Open Valve ${zNum}`;
+    actBtn.onclick = () => { state.manual[vKey] = !state.manual[vKey]; syncManualSwitches(); inspectHardware(key); };
+  } else if (key === "soil1" || key === "soil2" || key === "soil3") {
+    const zNum = key.slice(-1);
+    const moist = zNum === "1" ? d.mZ1 : (zNum === "2" ? d.mZ2 : d.mZ3);
+    titleEl.textContent = `🌱 Zone ${zNum} Capacitive Soil Moisture Probe`;
+    descEl.textContent = "Sub-surface volumetric water content (VWC) sensor preventing root waterlogging (>50% cutoff).";
+    specsEl.innerHTML = `
+      • <strong>Current Moisture:</strong> ${moist}% VWC<br>
+      • <strong>Threshold Status:</strong> ${moist > 50 ? "⚠️ WATERLOGGING LIMIT EXCEEDED" : "OPTIMAL CROP RANGE"}
+    `;
+  } else if (key === "pressureMid") {
+    titleEl.textContent = "📟 Mainline Hydraulic Pressure Transducers";
+    descEl.textContent = "Multi-point pressure monitoring used to detect leaks (<2.7 bar) and blockages (>3.5 bar).";
+    specsEl.innerHTML = `
+      • <strong>Start Pressure (Pump):</strong> ${d.pStart} bar<br>
+      • <strong>Mid-Line Pressure:</strong> ${d.pMid} bar<br>
+      • <strong>End-Line Pressure:</strong> ${d.pEnd} bar
+    `;
+  }
+
+  const consoleEl = $("pipelineConsole");
+  if (consoleEl) {
+    consoleEl.innerHTML = `<div class="console-line"><span style="color:var(--teal)">[HARDWARE INSPECT]</span> Opened diagnostics for <strong>${titleEl.textContent}</strong></div>` + consoleEl.innerHTML;
+  }
+  modal.classList.add("open");
+}
+
+function closeHwModal() {
+  $("hwModal").classList.remove("open");
+}
+
+// Drag-and-Drop Farmer Avatar on 3D SVG
+(function enableFarmerDrag() {
+  const svg = $("farmSvg");
+  const farmer = $("farmerMarker");
+  let dragging = false;
+
+  farmer.addEventListener("mousedown", () => { dragging = true; farmer.style.cursor = "grabbing"; });
+  window.addEventListener("mouseup", () => { dragging = false; farmer.style.cursor = "grab"; });
+  svg.addEventListener("mousemove", e => {
+    if (!dragging) return;
+    const rect = svg.getBoundingClientRect();
+    const scaleX = 860 / rect.width;
+    const scaleY = 420 / rect.height;
+    state.farmer.x = Math.max(255, Math.min(835, Math.round((e.clientX - rect.left) * scaleX)));
+    state.farmer.y = Math.max(45, Math.min(395, Math.round((e.clientY - rect.top) * scaleY)));
+    farmer.setAttribute("transform", `translate(${state.farmer.x}, ${state.farmer.y})`);
+  });
+})();
 
 async function loadLiveCsvData() {
   try {
@@ -745,11 +948,10 @@ $("btnSimulatePacket").onclick = () => {
   const consoleEl = $("pipelineConsole");
   const now = new Date().toLocaleTimeString();
   const sampleP = (3.10 + (Math.random() * 0.2 - 0.1)).toFixed(2);
-  const sampleFlow = (13.6 + (Math.random() * 0.6 - 0.3)).toFixed(1);
   const sampleEC = (1.85 + (Math.random() * 0.1 - 0.05)).toFixed(2);
 
   const steps = [
-    `<div class="console-line"><span style="color:#4da6ff">[${now}] STAGE 1 (ESP32):</span> Read Start_Bar=${sampleP}b, Tank Tank Level OK, EC=${sampleEC}mS/cm.</div>`,
+    `<div class="console-line"><span style="color:#4da6ff">[${now}] STAGE 1 (ESP32):</span> Read Start_Bar=${sampleP}b, Tank Level OK, EC=${sampleEC}mS/cm.</div>`,
     `<div class="console-line"><span style="color:#38d9c5">[${now}] STAGE 2 (CLOUD SYNC):</span> Appended telemetry packet to live CSV stream buffer.</div>`,
     `<div class="console-line"><span style="color:#f5b041">[${now}] STAGE 3 (1,344 MODEL):</span> Evaluated against baseline model -> Status: <strong>NORMAL</strong>.</div>`,
     `<div class="console-line"><span style="color:#58d68d">[${now}] STAGE 4 (ACTUATION):</span> Fertigation scheduled correctly. No overflow detected.</div>`
@@ -808,22 +1010,24 @@ function getCurrentData() {
     const m = state.manual;
     const irr = m.pump && !m.overflow ? 1 : 0;
     const fert = irr && m.fert ? 1 : 0;
-    const baseFlow = irr ? 13.8 : 0;
-    const fInlet = +(baseFlow * 3).toFixed(1);
+    const fZ1 = (irr && m.v1) ? 13.8 : 0;
+    const fZ2 = (irr && m.v2) ? 13.8 : 0;
+    const fZ3 = (irr && m.v3) ? 13.8 : 0;
+    const fInlet = +(fZ1 + fZ2 + fZ3).toFixed(1);
     const pStart = irr ? (m.overflow ? 3.85 : 3.22) : 0.0;
     const pMid = irr ? (m.overflow ? 3.40 : 2.86) : 0.0;
     const pEnd = irr ? (m.overflow ? 3.10 : 2.52) : 0.0;
     return {
       id: "MANUAL-LIVE", time: "Live Override", irr, fert,
       pStart, pMid, pEnd,
-      wTank: m.overflow ? 98.5 : 79.5, fInlet, fZ1: baseFlow, fZ2: baseFlow, fZ3: baseFlow,
+      wTank: m.overflow ? 98.5 : 79.5, fInlet, fZ1, fZ2, fZ3,
       mZ1: m.overflow ? 56.2 : 38.2, mZ2: 36.8, mZ3: 34.5,
       irrCond: m.overflow ? "Tank Overflow" : "Normal",
       faultSec: m.overflow ? "Pump House" : "",
       fTank: 81.0, targetDose: fert ? 145.0 : 0.0,
       actualDose: fert ? 144.5 : 0.0, ec: fert ? 1.92 : 0.0,
       injStat: fert ? "Active" : "Inactive",
-      valveStat: m.overflow ? "Closed (Overflow)" : "Open",
+      valveStat: m.overflow ? "Closed (Overflow)" : (fert ? "Open" : "Closed"),
       flushStat: "Not Required",
       fertCond: fert ? "Scheduled Injection" : "Pure Water Schedule",
       fertRisk: "Low"
@@ -856,6 +1060,7 @@ function updateUI() {
     <div class="card kpi"><span>Operating Layer</span><b style="color:${d.fert ? 'var(--gold)' : (d.irr ? 'var(--blue)' : 'var(--mut)')}">${d.fert ? 'Irrigation + Fert' : 'Pure Water Only'}</b></div>
     <div class="card kpi"><span>Water Tank Level</span><b style="color:${d.wTank > 95 ? 'var(--red)' : 'var(--teal)'}">${d.wTank}%</b></div>
     <div class="card kpi"><span>Inlet Flow Rate</span><b>${d.fInlet} L/m</b></div>
+    <div class="card kpi"><span>Pressure (S / M / E)</span><b>${d.pStart} / ${d.pMid} / ${d.pEnd} b</b></div>
     <div class="card kpi"><span>Fertilizer Dose</span><b style="color:${d.fert ? 'var(--gold)' : 'var(--mut)'}">${d.actualDose} ml/m</b></div>
     <div class="card kpi"><span>Solution EC</span><b style="color:${d.ec > 2.6 ? 'var(--red)' : 'var(--teal)'}">${d.ec.toFixed(2)} mS/cm</b></div>
   `;
@@ -866,33 +1071,37 @@ function updateUI() {
   mainAnim.setAttribute("stroke", pipeColor);
 
   [
-    { anim: "z1PipeAnim", flow: d.fZ1, sub: "z1Sub", m: d.mZ1, rect: "z1Rect" },
-    { anim: "z2PipeAnim", flow: d.fZ2, sub: "z2Sub", m: d.mZ2, rect: "z2Rect" },
-    { anim: "z3PipeAnim", flow: d.fZ3, sub: "z3Sub", m: d.mZ3, rect: "z3Rect" }
-  ].forEach(z => {
+    { anim: "z1PipeAnim", flow: d.fZ1, sub: "z1Sub", sens: "z1SensorTxt", vTxt: "v1Txt", vOn: state.manual.v1, m: d.mZ1, rect: "z1Rect" },
+    { anim: "z2PipeAnim", flow: d.fZ2, sub: "z2Sub", sens: "z2SensorTxt", vTxt: "v2Txt", vOn: state.manual.v2, m: d.mZ2, rect: "z2Rect" },
+    { anim: "z3PipeAnim", flow: d.fZ3, sub: "z3Sub", sens: "z3SensorTxt", vTxt: "v3Txt", vOn: state.manual.v3, m: d.mZ3, rect: "z3Rect" }
+  ].forEach((z, idx) => {
+    const isFlowing = d.irr && z.flow > 0 && !state.manual.overflow && (!state.manualMode || z.vOn);
     const el = $(z.anim);
-    el.style.opacity = (d.irr && z.flow > 0 && !state.manual.overflow) ? "1" : "0";
+    el.style.opacity = isFlowing ? "1" : "0";
     el.setAttribute("stroke", pipeColor);
     $(z.sub).textContent = `Moisture: ${z.m}%`;
+    $(z.sens).textContent = `${z.m}% VWC · Tap`;
+    $(z.vTxt).textContent = `VALVE ${idx + 1}: ${isFlowing ? "ON" : "OFF"}`;
+    $(z.vTxt).setAttribute("fill", isFlowing ? "#38d9c5" : "#f25f6b");
     $(z.rect).setAttribute("fill", z.m > 50 ? "#113824" : "#13301f");
   });
 
-  $("waterTankText").textContent = `Tank: ${d.wTank}% ${d.wTank > 95 ? '(OVERFLOW!)' : ''}`;
-  $("pumpPressText").textContent = `Start: ${d.pStart} bar`;
+  $("waterTankText").textContent = `Water Tank: ${d.wTank}% ${d.wTank > 95 ? '(OVERFLOW!)' : ''}`;
+  $("pumpPressText").textContent = `Start Pressure: ${d.pStart} bar`;
   $("fertTankText").textContent = `Chem Tank: ${d.fTank}%`;
   $("ecText").textContent = `EC: ${d.ec.toFixed(2)} mS/cm`;
-  $("valveText").textContent = `Valve: ${d.valveStat.toUpperCase()}`;
+  $("valveText").textContent = `Backflow Valve: ${d.valveStat.toUpperCase()}`;
 
   const hasIrrFault = d.irrCond !== "Normal";
   const hasFertFault = d.fertCond !== "Not Active" && d.fertCond !== "Normal Injection" && d.fertCond !== "Scheduled Injection";
   const activeFault = state.manual.overflow ? "Tank Overflow" : (hasIrrFault ? d.irrCond : (hasFertFault ? d.fertCond : null));
 
   const fm = $("faultMarker");
-  let faultCoords = { x: 468, y: 177 };
+  let faultCoords = { x: 468, y: 175 };
   if (activeFault) {
-    if (state.manual.overflow) faultCoords = { x: 90, y: 150 };
-    else if (d.faultSec.includes("Start")) faultCoords = { x: 320, y: 177 };
-    else if (d.faultSec.includes("End") || d.faultSec.includes("Zone 3")) faultCoords = { x: 710, y: 177 };
+    if (state.manual.overflow) faultCoords = { x: 127, y: 155 };
+    else if (d.faultSec.includes("Start")) faultCoords = { x: 320, y: 175 };
+    else if (d.faultSec.includes("End") || d.faultSec.includes("Zone 3")) faultCoords = { x: 710, y: 175 };
     fm.setAttribute("transform", `translate(${faultCoords.x}, ${faultCoords.y})`);
     $("faultMarkerLabel").textContent = activeFault.toUpperCase();
     fm.style.display = "block";
@@ -986,7 +1195,7 @@ $("btnPlay").onclick = () => {
   }
 };
 
-const walkWaypoints = [{ x: 100, y: 240 }, { x: 320, y: 190 }, { x: 500, y: 190 }, { x: 710, y: 190 }];
+const walkWaypoints = [{ x: 260, y: 240 }, { x: 365, y: 250 }, { x: 553, y: 250 }, { x: 741, y: 250 }];
 $("btnWalk").onclick = () => {
   state.walkStep = (state.walkStep + 1) % walkWaypoints.length;
   state.farmer = walkWaypoints[state.walkStep];
