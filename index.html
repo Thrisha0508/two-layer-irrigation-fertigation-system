@@ -769,6 +769,52 @@ const $ = id => document.getElementById(id);
 let logs = [];
 let flowChartObj = null, pressChartObj = null, distChartObj = null, liveFluctTimer = null;
 
+function playBeep(freq = 880, duration = 0.14) {
+  if (!state.alarmOn) return;
+  try {
+    if (!state.audioCtx) {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      state.audioCtx = new AudioContextClass();
+    }
+    if (state.audioCtx.state === "suspended") {
+      state.audioCtx.resume();
+    }
+    const osc = state.audioCtx.createOscillator();
+    const gain = state.audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.12, state.audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, state.audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(state.audioCtx.destination);
+    osc.start();
+    osc.stop(state.audioCtx.currentTime + duration);
+  } catch (e) {}
+}
+
+function updateAlarmLoop(activeFault) {
+  clearInterval(state.beepTimer);
+  if (!state.alarmOn || !activeFault) return;
+  const isCritical = ["Tank Overflow", "Leakage", "Blockage", "Abnormal EC"].some(k => activeFault.includes(k));
+  const intervalMs = isCritical ? 650 : 1300;
+  const toneHz = isCritical ? 980 : 740;
+  playBeep(toneHz, 0.14);
+  state.beepTimer = setInterval(() => playBeep(toneHz, 0.14), intervalMs);
+}
+
+$("btnAlarm").onclick = () => {
+  state.alarmOn = !state.alarmOn;
+  const btn = $("btnAlarm");
+  btn.textContent = state.alarmOn ? "🔊 Alarm: ON" : "🔊 Alarm: OFF";
+  btn.classList.toggle("active-toggle", state.alarmOn);
+  if (state.alarmOn) {
+    playBeep(660, 0.12);
+    updateUI();
+  } else {
+    clearInterval(state.beepTimer);
+  }
+};
+
 function inspectHardware(key) {
   const d = getCurrentData();
   const modal = $("hwModal");
@@ -1081,6 +1127,8 @@ function updateUI() {
   const hasIrrFault = d.irrCond !== "Normal";
   const hasFertFault = d.fertCond !== "Not Active" && d.fertCond !== "Normal Injection" && d.fertCond !== "Scheduled Injection";
   const activeFault = state.manual.overflow ? "Tank Overflow" : (hasIrrFault ? d.irrCond : (hasFertFault ? d.fertCond : null));
+
+  updateAlarmLoop(activeFault);
 
   const fm = $("faultMarker");
   let faultCoords = { x: 468, y: 175 };
