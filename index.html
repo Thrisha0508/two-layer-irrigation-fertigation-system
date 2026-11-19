@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Smart Farm 3D Real Farmland Digital Twin & IoT Dashboard</title>
+<title>Smart Farm Real Farmland Digital Twin & IoT Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
@@ -165,7 +165,6 @@
   .crit { background: rgba(242, 95, 107, 0.22); color: var(--red); }
 
   .stage-3d-wrap {
-    perspective: 1400px;
     width: 100%;
     background: radial-gradient(circle at center, #0a1f18 0%, #040911 100%);
     border-radius: 14px;
@@ -174,9 +173,8 @@
     overflow: hidden;
   }
   .farm-3d-scene {
-    transform: rotateX(20deg) rotateZ(-8deg);
-    transform-style: preserve-3d;
-    transition: transform 0.5s ease;
+    transform: none;
+    transform-style: flat;
     width: 100%;
     height: 440px;
     position: relative;
@@ -264,7 +262,7 @@
   <h1>FARMLAND 3D</h1>
   <small>1.5-Acre Dual-Layer IoT</small>
   <button class="on" data-tab="mapTab">🌾 Real Farm Land Map</button>
-  <button data-tab="workflowTab">🔄 3D Data Flow Pipeline</button>
+  <button data-tab="workflowTab">🔄 Data Flow Pipeline</button>
   <button data-tab="analyticsTab">📊 Live Charts &amp; 1,344 Dataset</button>
   <button data-tab="layersTab">⚡ Safety Interlocks &amp; Specs</button>
 
@@ -284,7 +282,7 @@
     </div>
   </div>
 
-  <!-- TAB 1: REAL FARM LAND 3D MAP -->
+  <!-- TAB 1: REAL FARM LAND MAP -->
   <section class="page on" id="mapTab">
     <div class="toolbar">
       <button class="btn primary" id="btnModeToggle">🎛️ Mode: Dataset Replay</button>
@@ -342,8 +340,7 @@
               <rect id="z1Rect" x="280" y="55" width="170" height="325" rx="10" fill="#13301f" stroke="#40916c" stroke-width="2" />
               <text x="365" y="80" fill="#d8f3dc" font-size="13" font-weight="bold" text-anchor="middle">ZONE 1: ROOT CROPS</text>
               <text id="z1Sub" x="365" y="98" fill="#b7e4c7" font-size="11" text-anchor="middle">Moisture: 38.6%</text>
-              
-              <!-- Physical Soil Sensor 1 -->
+
               <g class="hw-node" onclick="inspectHardware('soil1')">
                 <rect x="310" y="295" width="110" height="38" rx="6" fill="#07131e" stroke="#58d68d" stroke-width="1.5" />
                 <text x="365" y="311" fill="#58d68d" font-size="9" font-weight="bold" text-anchor="middle">🌱 CAPACITIVE SENSOR 1</text>
@@ -357,7 +354,6 @@
               <text x="553" y="80" fill="#d8f3dc" font-size="13" font-weight="bold" text-anchor="middle">ZONE 2: VEGETABLES</text>
               <text id="z2Sub" x="553" y="98" fill="#b7e4c7" font-size="11" text-anchor="middle">Moisture: 34.2%</text>
 
-              <!-- Physical Soil Sensor 2 -->
               <g class="hw-node" onclick="inspectHardware('soil2')">
                 <rect x="498" y="295" width="110" height="38" rx="6" fill="#07131e" stroke="#58d68d" stroke-width="1.5" />
                 <text x="553" y="311" fill="#58d68d" font-size="9" font-weight="bold" text-anchor="middle">🌱 CAPACITIVE SENSOR 2</text>
@@ -371,7 +367,6 @@
               <text x="741" y="80" fill="#d8f3dc" font-size="13" font-weight="bold" text-anchor="middle">ZONE 3: ORCHARD</text>
               <text id="z3Sub" x="741" y="98" fill="#b7e4c7" font-size="11" text-anchor="middle">Moisture: 24.9%</text>
 
-              <!-- Physical Soil Sensor 3 -->
               <g class="hw-node" onclick="inspectHardware('soil3')">
                 <rect x="686" y="295" width="110" height="38" rx="6" fill="#07131e" stroke="#58d68d" stroke-width="1.5" />
                 <text x="741" y="311" fill="#58d68d" font-size="9" font-weight="bold" text-anchor="middle">🌱 CAPACITIVE SENSOR 3</text>
@@ -383,14 +378,12 @@
             <rect x="15" y="15" width="225" height="390" rx="12" fill="#07111e" stroke="#1f3a5f" stroke-width="2" />
             <text x="127" y="38" fill="#38d9c5" font-size="11" font-weight="bold" text-anchor="middle">PUMP HOUSE &amp; PLC STATION</text>
 
-            <!-- Clickable ESP32 Controller -->
             <g class="hw-node" onclick="inspectHardware('esp32')">
               <rect x="28" y="52" width="198" height="52" rx="6" fill="#0d1b2a" stroke="#38d9c5" stroke-width="2" />
               <text x="127" y="74" fill="#eef4fc" font-size="11" font-weight="bold" text-anchor="middle">🔌 ESP32 IOT CONTROLLER</text>
               <text id="plcStateText" x="127" y="90" fill="#38d9c5" font-size="9" text-anchor="middle">24V Relays Active · Tap to Inspect</text>
             </g>
 
-            <!-- Clickable Centrifugal Pump & Water Tank -->
             <g class="hw-node" onclick="inspectHardware('pump')">
               <rect x="28" y="122" width="198" height="105" rx="8" fill="#0f223d" stroke="#4da6ff" stroke-width="2" />
               <text x="127" y="143" fill="#4da6ff" font-size="10" font-weight="bold" text-anchor="middle">⚙️ CENTRIFUGAL PUMP &amp; TANK</text>
@@ -399,7 +392,6 @@
               <text x="127" y="202" fill="#38d9c5" font-size="9" text-anchor="middle">[Click to Inspect / Toggle Pump]</text>
             </g>
 
-            <!-- Clickable Venturi Fertilizer Injector -->
             <g class="hw-node" onclick="inspectHardware('venturi')">
               <rect id="fertBox" x="28" y="248" width="198" height="138" rx="8" fill="#241e15" stroke="#f5b041" stroke-width="2" />
               <text x="127" y="270" fill="#f5b041" font-size="10" font-weight="bold" text-anchor="middle">🧪 VENTURI FERTIGATION UNIT</text>
@@ -422,7 +414,6 @@
             <path d="M 741 175 L 741 290" stroke="#163052" stroke-width="6" fill="none" />
             <path id="z3PipeAnim" d="M 741 175 L 741 290" stroke="#4da6ff" stroke-width="5" fill="none" class="water-flow" />
 
-            <!-- Clickable Solenoid Valves on Lateral Lines -->
             <g class="hw-node" onclick="inspectHardware('valve1')">
               <rect x="330" y="198" width="70" height="24" rx="5" fill="#050b14" stroke="#38d9c5" stroke-width="1.5" />
               <text id="v1Txt" x="365" y="214" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 1: ON</text>
@@ -436,20 +427,17 @@
               <text id="v3Txt" x="741" y="214" fill="#38d9c5" font-size="9" font-weight="bold" text-anchor="middle">VALVE 3: ON</text>
             </g>
 
-            <!-- Clickable Pressure Transducers -->
             <g class="hw-node" onclick="inspectHardware('pressureMid')">
               <circle cx="458" cy="175" r="11" fill="#0b1728" stroke="#f5b041" stroke-width="2" />
               <text x="458" y="178" fill="#f5b041" font-size="8" font-weight="bold" text-anchor="middle">PSI</text>
             </g>
 
-            <!-- Fault Marker -->
             <g id="faultMarker" transform="translate(468, 175)" style="display:none">
               <circle cx="0" cy="0" r="14" fill="#f25f6b" />
               <text x="0" y="4" fill="#fff" font-size="11" font-weight="bold" text-anchor="middle">!</text>
               <text id="faultMarkerLabel" x="0" y="28" fill="#ff9aa2" font-size="11" font-weight="bold" text-anchor="middle">LEAK</text>
             </g>
 
-            <!-- Draggable Farmer Avatar -->
             <g id="farmerMarker" transform="translate(260, 240)" style="cursor:grab">
               <circle cx="0" cy="0" r="13" fill="#38d9c5" stroke="#040810" stroke-width="2" />
               <text x="0" y="4" fill="#040810" font-size="11" font-weight="bold" text-anchor="middle">👨‍🌾</text>
@@ -553,7 +541,7 @@
         <h3>📟 Live Packet Transformation Console</h3>
         <div class="console-box" id="pipelineConsole">
           <div class="console-line">[SYS] Pipeline initialized. Linked to 1,344 historical records.</div>
-          <div class="console-line">[INFO] Click any hardware component on the 3D map to inspect live sensors.</div>
+          <div class="console-line">[INFO] Click any hardware component on the map to inspect live sensors.</div>
         </div>
       </div>
 
@@ -781,7 +769,6 @@ const $ = id => document.getElementById(id);
 let logs = [];
 let flowChartObj = null, pressChartObj = null, distChartObj = null, liveFluctTimer = null;
 
-// Interactive Hardware Inspection Logic
 function inspectHardware(key) {
   const d = getCurrentData();
   const modal = $("hwModal");
@@ -869,7 +856,6 @@ function closeHwModal() {
   $("hwModal").classList.remove("open");
 }
 
-// Drag-and-Drop Farmer Avatar on 3D SVG
 (function enableFarmerDrag() {
   const svg = $("farmSvg");
   const farmer = $("farmerMarker");
